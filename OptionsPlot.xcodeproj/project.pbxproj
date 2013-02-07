@@ -8,8 +8,14 @@
 
 /* Begin PBXBuildFile section */
 		C57FDB2916C1B97A0060C293 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C57FDB2816C1B97A0060C293 /* Foundation.framework */; };
-		C57FDB2C16C1B97A0060C293 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = C57FDB2B16C1B97A0060C293 /* main.m */; };
+		C57FDB2C16C1B97A0060C293 /* main.mm in Sources */ = {isa = PBXBuildFile; fileRef = C57FDB2B16C1B97A0060C293 /* main.mm */; };
 		C57FDB3016C1B97A0060C293 /* OptionsPlot.1 in CopyFiles */ = {isa = PBXBuildFile; fileRef = C57FDB2F16C1B97A0060C293 /* OptionsPlot.1 */; };
+		C57FDB3816C1BA260060C293 /* optionQuoteDownload.mm in Sources */ = {isa = PBXBuildFile; fileRef = C57FDB3716C1BA260060C293 /* optionQuoteDownload.mm */; };
+		C57FDB3B16C1D1A50060C293 /* OptionQuote.mm in Sources */ = {isa = PBXBuildFile; fileRef = C57FDB3A16C1D1A50060C293 /* OptionQuote.mm */; };
+		C5E8029916C4204700E28297 /* black_scholes_call.cc in Sources */ = {isa = PBXBuildFile; fileRef = C5E8029816C4204700E28297 /* black_scholes_call.cc */; };
+		C5E8029B16C4205500E28297 /* black_scholes_put.cc in Sources */ = {isa = PBXBuildFile; fileRef = C5E8029A16C4205500E28297 /* black_scholes_put.cc */; };
+		C5E8029D16C4221400E28297 /* normdist.cc in Sources */ = {isa = PBXBuildFile; fileRef = C5E8029C16C4221400E28297 /* normdist.cc */; };
+		C5E8029F16C4225400E28297 /* cum_normal.cc in Sources */ = {isa = PBXBuildFile; fileRef = C5E8029E16C4225400E28297 /* cum_normal.cc */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -28,9 +34,18 @@
 /* Begin PBXFileReference section */
 		C57FDB2516C1B97A0060C293 /* OptionsPlot */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = OptionsPlot; sourceTree = BUILT_PRODUCTS_DIR; };
 		C57FDB2816C1B97A0060C293 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
-		C57FDB2B16C1B97A0060C293 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
+		C57FDB2B16C1B97A0060C293 /* main.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = main.mm; sourceTree = "<group>"; };
 		C57FDB2E16C1B97A0060C293 /* OptionsPlot-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "OptionsPlot-Prefix.pch"; sourceTree = "<group>"; };
 		C57FDB2F16C1B97A0060C293 /* OptionsPlot.1 */ = {isa = PBXFileReference; lastKnownFileType = text.man; path = OptionsPlot.1; sourceTree = "<group>"; };
+		C57FDB3616C1BA260060C293 /* optionQuoteDownload.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = optionQuoteDownload.h; sourceTree = "<group>"; };
+		C57FDB3716C1BA260060C293 /* optionQuoteDownload.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = optionQuoteDownload.mm; sourceTree = "<group>"; };
+		C57FDB3916C1D1A50060C293 /* OptionQuote.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OptionQuote.h; sourceTree = "<group>"; };
+		C57FDB3A16C1D1A50060C293 /* OptionQuote.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OptionQuote.mm; sourceTree = "<group>"; };
+		C5E8029716C4202500E28297 /* normdist.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = normdist.h; sourceTree = "<group>"; };
+		C5E8029816C4204700E28297 /* black_scholes_call.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = black_scholes_call.cc; sourceTree = "<group>"; };
+		C5E8029A16C4205500E28297 /* black_scholes_put.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = black_scholes_put.cc; sourceTree = "<group>"; };
+		C5E8029C16C4221400E28297 /* normdist.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = normdist.cc; sourceTree = "<group>"; };
+		C5E8029E16C4225400E28297 /* cum_normal.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = cum_normal.cc; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -73,7 +88,16 @@
 		C57FDB2A16C1B97A0060C293 /* OptionsPlot */ = {
 			isa = PBXGroup;
 			children = (
-				C57FDB2B16C1B97A0060C293 /* main.m */,
+				C5E8029716C4202500E28297 /* normdist.h */,
+				C5E8029E16C4225400E28297 /* cum_normal.cc */,
+				C5E8029C16C4221400E28297 /* normdist.cc */,
+				C5E8029816C4204700E28297 /* black_scholes_call.cc */,
+				C5E8029A16C4205500E28297 /* black_scholes_put.cc */,
+				C57FDB2B16C1B97A0060C293 /* main.mm */,
+				C57FDB3916C1D1A50060C293 /* OptionQuote.h */,
+				C57FDB3A16C1D1A50060C293 /* OptionQuote.mm */,
+				C57FDB3616C1BA260060C293 /* optionQuoteDownload.h */,
+				C57FDB3716C1BA260060C293 /* optionQuoteDownload.mm */,
 				C57FDB2F16C1B97A0060C293 /* OptionsPlot.1 */,
 				C57FDB2D16C1B97A0060C293 /* Supporting Files */,
 			);
@@ -139,7 +163,13 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				C57FDB2C16C1B97A0060C293 /* main.m in Sources */,
+				C57FDB2C16C1B97A0060C293 /* main.mm in Sources */,
+				C57FDB3816C1BA260060C293 /* optionQuoteDownload.mm in Sources */,
+				C57FDB3B16C1D1A50060C293 /* OptionQuote.mm in Sources */,
+				C5E8029916C4204700E28297 /* black_scholes_call.cc in Sources */,
+				C5E8029B16C4205500E28297 /* black_scholes_put.cc in Sources */,
+				C5E8029D16C4221400E28297 /* normdist.cc in Sources */,
+				C5E8029F16C4225400E28297 /* cum_normal.cc in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -242,6 +272,7 @@
 				C57FDB3516C1B97A0060C293 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
