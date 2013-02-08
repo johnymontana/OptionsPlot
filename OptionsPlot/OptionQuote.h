@@ -22,8 +22,24 @@
 @property (strong, nonatomic) NSString* underlyingTicker;
 @property (strong, nonatomic) NSNumber* underlyingVolatility;
 @property (strong, nonatomic) NSNumber* impliedVolatility;
+@property (strong, nonatomic) NSNumber* blackScholesPrice;
+@property (strong, nonatomic) NSNumber* spotPrice;
+@property (strong, nonatomic) NSDate* expiration;
 
 
--(id) initWithSymbol:(NSString*)symbol andAsk:(NSNumber*) ask andBid:(NSNumber*) bid atLastPrice:(NSNumber*) lastPrice withOpenInterest:(NSNumber*) openInt atStrikePrice:(NSNumber*) strikePrice ofType:(NSString*) type withVolume:(NSNumber*) volume andUnderlyingTicker:(NSString*) underlyingTicker;
+-(id) initWithSymbol:(NSString*)symbol
+              andAsk:(NSNumber*) ask
+              andBid:(NSNumber*) bid
+         atLastPrice:(NSNumber*) lastPrice
+    withOpenInterest:(NSNumber*) openInt
+       atStrikePrice:(NSNumber*) strikePrice
+              ofType:(NSString*) type
+      withExpiration:(NSDate*) expiration
+          withVolume:(NSNumber*) volume
+ andUnderlyingTicker:(NSString*) underlyingTicker
+      withVolatility:(NSNumber*) volatility
+        andSpotPrice:(NSNumber*) spot;
+
+-(void) calcBlackScholesPrice;
 
 @end

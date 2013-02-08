@@ -26,15 +26,19 @@
 
 //#define QUOTE_QUERY_SUFFIX @")&diagnostics=true&env=http%3A%2F%2Fdatatables.org%2Falltables.env"
 
+//http://query.yahooapis.com/v1/public/yql?q=SELECT%20*%20FROM%20yahoo.finance.options%20WHERE%20symbol%3D'GOOG'%20and%20expiration%3D%222013-03%22&format=json&env=store%3A%2F%2Fdatatables.org%2Falltableswithkeys&callback=
+
+// TODO: fix expiration date issue
+// for now, March 2013 is hardcoded, and 2013-03-15 is hardcoded for expiration
 #define QUOTE_QUERY_PREFIX @"http://query.yahooapis.com/v1/public/yql?q=select%20*%20from%20yahoo.finance.options%20where%20symbol%20in%20("
-#define QUOTE_QUERY_SUFFIX @")&format=json&diagnostics=false&env=http%3A%2F%2Fdatatables.org%2Falltables.env&callback="
+#define QUOTE_QUERY_SUFFIX @")%20and%20expiration%3D%222013-03%22&format=json&diagnostics=false&env=http%3A%2F%2Fdatatables.org%2Falltables.env&callback="
 
 + (NSArray *)fetchQuotesFor:(NSArray *)tickers
 {
     // NSMutableDictionary *quotes;  // this should probably be an NSMutableArray
     NSMutableArray *quotes = [[NSMutableArray alloc] init];
     // REFACTOR THIS:
-    NSString* assetTicket = tickers[0];
+    NSString* assetTicker = tickers[0];
     
     if (tickers && [tickers count] > 0) {
         NSMutableString *query = [[NSMutableString alloc] init]; 
@@ -52,26 +56,49 @@
         if (error) NSLog(@"[%@ %@] JSON error: %@", NSStringFromClass([self class]), NSStringFromSelector(_cmd), error.localizedDescription);
         NSLog(@"[%@ %@] received %@", NSStringFromClass([self class]), NSStringFromSelector(_cmd), results);
         NSArray *quoteEntries = [results valueForKeyPath:@"query.results.optionsChain.option"];
+        
+        NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
+        [dateFormatter setDateStyle:NSDateFormatterShortStyle];
+        [dateFormatter setDateFormat:@"yyyy'-'MM'-'dd'"];
+        NSString* expirationDate = [results valueForKeyPath:@"query.results.optionsChain.expiration"];
+        
+        NSDate* exprDate = [dateFormatter dateFromString:expirationDate];
+        
         // quotes = [[NSMutableDictionary alloc] initWithCapacity:[quoteEntries count]];
         
         NSNumberFormatter *formatter = [[NSNumberFormatter alloc] init];
         [formatter setNumberStyle:NSNumberFormatterDecimalStyle];
         
+        NSNumber* volatility = [optionQuoteDownload calcUnderlyingVolatility:assetTicker];
+        NSNumber* spot = [optionQuoteDownload getCurrentPrice:assetTicker];
+        
         for (NSDictionary *quoteEntry in quoteEntries) {
+            
+            NSLog(@"Expiration date: %@", expirationDate);
             
             // TODO: init OptionQuote object with quote data and add to quote (NSArray?) dict - DONE
             // TODO: how to cast these things to the correct data type?!?! Things with . are strings, NSUIntegers?
             // NSLog(@"Strike: %@", quoteEntry[@"strikePrice"]);
-            [quotes addObject:[[OptionQuote alloc] initWithSymbol:quoteEntry[@"symbol"]
-                                                           andAsk:[formatter numberFromString:quoteEntry[@"ask"]]
-                                                           andBid:[formatter numberFromString:quoteEntry[@"bid"]]
-                                                      atLastPrice:[formatter numberFromString:quoteEntry[@"lastPrice"]]
-                                                 withOpenInterest:[formatter numberFromString:quoteEntry[@"openInt"]]
-                                                    atStrikePrice:[formatter numberFromString:quoteEntry[@"strikePrice"]]
-                                                           ofType:quoteEntry[@"type"]
-                                                       withVolume:[formatter numberFromString:quoteEntry[@"vol"]]
-                                              andUnderlyingTicker:assetTicket]];
-             
+            for (id key in quoteEntry)
+            {
+                NSLog(@"QuoteEntry: %@:%@", key, quoteEntry[key]);
+            
+            }
+            
+            if (quoteEntry[@"lastPrice"])
+            {   [quotes addObject:[[OptionQuote alloc] initWithSymbol:quoteEntry[@"symbol"] ? quoteEntry[@"symbol"]:nil
+                                                           andAsk:(quoteEntry[@"ask"] ? [formatter numberFromString:quoteEntry[@"ask"]]:nil)
+                                                           andBid:(quoteEntry[@"bid"] ? [formatter numberFromString:quoteEntry[@"bid"]]:nil)
+                                                      atLastPrice:(quoteEntry[@"lastPrice"] ? [formatter numberFromString:quoteEntry[@"lastPrice"]]:nil)
+                                                 withOpenInterest:(quoteEntry[@"openInt"] ? [formatter numberFromString:quoteEntry[@"openInt"]]:nil)
+                                                    atStrikePrice:(quoteEntry[@"strikePrice"] ? [formatter numberFromString:quoteEntry[@"strikePrice"]]:nil)
+                                                           ofType:(quoteEntry[@"type"] ?quoteEntry[@"type"]:nil)
+                                                   withExpiration:exprDate
+                                                       withVolume:(quoteEntry[@"vol"] ?[formatter numberFromString:quoteEntry[@"vol"]]:nil)
+                                              andUnderlyingTicker:assetTicker
+                                                   withVolatility:volatility
+                                                     andSpotPrice:spot]];
+            }
             
             //[quotes setValue:[quoteEntry valueForKey:@"lastPrice"] forKey:[quoteEntry valueForKey:@"strikePrice"]];
         }
@@ -151,12 +178,50 @@
     
     NSLog(@"%@", histQuotes);
     double stdDev = [[self standardDeviationOf:histQuotes] doubleValue];
-    double normalizeTerm = sqrt(21);
+    double normalizeTerm = sqrt(21)*.01;
     
     return [NSNumber numberWithDouble:(stdDev*normalizeTerm)];
     
     
 }
+
+
+// http://query.yahooapis.com/v1/public/yql?q=select%20*%20from%20yahoo.finance.quotes%20where%20symbol%3D%22AAPL%22&format=json&env=store%3A%2F%2Fdatatables.org%2Falltableswithkeys&callback=
+#define CURR_QUOTE_PREFIX @"http://query.yahooapis.com/v1/public/yql?q=select%20*%20from%20yahoo.finance.quotes%20where%20symbol%3D%22"
+#define CURR_QUOTE_SUFFIX @"%22&format=json&env=store%3A%2F%2Fdatatables.org%2Falltableswithkeys&callback="
+
+
++(NSNumber*)getCurrentPrice:(NSString *)ticker
+{
+    
+    
+   // NSMutableArray* histQuotes = [[NSMutableArray alloc] init];
+    NSMutableString* query = [[NSMutableString alloc] init];
+    
+    [query appendString:CURR_QUOTE_PREFIX];
+    //[query appendFormat:@"%%22%@%%22", ticker];
+    [query appendFormat:@"%@", ticker];
+    [query appendString:CURR_QUOTE_SUFFIX];
+    
+    NSLog(@"Query: %@", query);
+    
+    NSData* jsonData = [[NSString stringWithContentsOfURL:[NSURL URLWithString:query] encoding:NSUTF8StringEncoding error:nil] dataUsingEncoding:NSUTF8StringEncoding];
+    NSError *error = nil;
+    NSDictionary *results = jsonData ? [NSJSONSerialization JSONObjectWithData:jsonData options:0 error:&error ] : nil;
+    
+    if (error) NSLog(@"[%@ %@] JSON error: %@", NSStringFromClass([self class]), NSStringFromSelector(_cmd), error.localizedDescription);
+    NSLog(@"[%@ %@] received %@", NSStringFromClass([self class]), NSStringFromSelector(_cmd), results);
+    NSString* lastTradePriceOnly = [results valueForKeyPath:@"query.results.quote.LastTradePriceOnly"]; // see what we get
+    NSLog(@"Last Trade price: %@", lastTradePriceOnly);
+    
+    NSNumberFormatter *formatter = [[NSNumberFormatter alloc] init];
+    [formatter setNumberStyle:NSNumberFormatterDecimalStyle];
+    
+         return [formatter numberFromString:lastTradePriceOnly];
+    
+}
+
+
 
 
 @end
