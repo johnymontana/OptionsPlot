@@ -16,14 +16,15 @@ int main(int argc, const char * argv[])
     @autoreleasepool {
         
         
-        NSArray* tickers = @[@"AAPL"];
+        NSArray* tickers = @[@"MSFT"];
         
         NSArray *quotes = [optionQuoteDownload fetchQuotesFor:tickers];
         
         for (OptionQuote* quote in quotes)
         {
-            NSLog(@"%@", [quote description]);
             [quote calcBlackScholesPrice];
+            NSLog(@"%@", [quote description]);
+            
             NSLog(@"BS Price: %@", quote.blackScholesPrice);
         }
         

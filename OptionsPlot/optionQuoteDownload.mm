@@ -86,18 +86,18 @@
             }
             
             if (quoteEntry[@"lastPrice"])
-            {   [quotes addObject:[[OptionQuote alloc] initWithSymbol:quoteEntry[@"symbol"] ? quoteEntry[@"symbol"]:nil
-                                                           andAsk:(quoteEntry[@"ask"] ? [formatter numberFromString:quoteEntry[@"ask"]]:nil)
-                                                           andBid:(quoteEntry[@"bid"] ? [formatter numberFromString:quoteEntry[@"bid"]]:nil)
-                                                      atLastPrice:(quoteEntry[@"lastPrice"] ? [formatter numberFromString:quoteEntry[@"lastPrice"]]:nil)
-                                                 withOpenInterest:(quoteEntry[@"openInt"] ? [formatter numberFromString:quoteEntry[@"openInt"]]:nil)
-                                                    atStrikePrice:(quoteEntry[@"strikePrice"] ? [formatter numberFromString:quoteEntry[@"strikePrice"]]:nil)
-                                                           ofType:(quoteEntry[@"type"] ?quoteEntry[@"type"]:nil)
-                                                   withExpiration:exprDate
-                                                       withVolume:(quoteEntry[@"vol"] ?[formatter numberFromString:quoteEntry[@"vol"]]:nil)
-                                              andUnderlyingTicker:assetTicker
-                                                   withVolatility:volatility
-                                                     andSpotPrice:spot]];
+            {   [quotes addObject:[[OptionQuote alloc] initWithSymbol:quoteEntry[@"symbol"]
+                                                               andAsk:[formatter numberFromString:quoteEntry[@"ask"]]
+                                                               andBid:[formatter numberFromString:quoteEntry[@"bid"]]
+                                                          atLastPrice:[formatter numberFromString:quoteEntry[@"lastPrice"]]
+                                                     withOpenInterest:[formatter numberFromString:quoteEntry[@"openInt"]]
+                                                        atStrikePrice:[formatter numberFromString:quoteEntry[@"strikePrice"]]
+                                                               ofType:quoteEntry[@"type"]
+                                                       withExpiration:exprDate
+                                                           withVolume:[formatter numberFromString:quoteEntry[@"vol"]]
+                                                  andUnderlyingTicker:assetTicker
+                                                       withVolatility:volatility
+                                                         andSpotPrice:spot]];
             }
             
             //[quotes setValue:[quoteEntry valueForKey:@"lastPrice"] forKey:[quoteEntry valueForKey:@"strikePrice"]];

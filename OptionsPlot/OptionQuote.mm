@@ -52,7 +52,7 @@ withExpiration:(NSDate*)expiration
 -(NSString*)description
 {
     // TODO: return NSString description of OptionQuote
-    return [NSString stringWithFormat:@"%@: %@ at %@, %@, expr:%@ %@, sigma= %@", self.underlyingTicker, self.symbol, self.strikePrice, self.lastPrice, [self.expiration description], self.type, self.underlyingVolatility];
+    return [NSString stringWithFormat:@"%@: %@ at %@, lastOptPrice: %@, bsPrice: %@, expr:%@ %@, sigma= %@", self.underlyingTicker, self.symbol, self.strikePrice, self.lastPrice, self.blackScholesPrice, [self.expiration descriptionWithCalendarFormat:@"%Y-%m-%d" timeZone:nil locale:nil], self.type, self.underlyingVolatility];
 }
 
 -(NSNumber*)underlyingVolatility
@@ -61,7 +61,7 @@ withExpiration:(NSDate*)expiration
     return _underlyingVolatility;
 }
 
--(void) setImpliedVolatility:(NSNumber *)impliedVolatility
+-(void) calcImpliedVolatility
 {
     
 }
@@ -69,7 +69,7 @@ withExpiration:(NSDate*)expiration
 -(void) calcBlackScholesPrice
 {
     double risk_free_rate = RISK_FREE_RATE;
-    double time = 0.5;
+    double time = 0.1;
     double spot = [self.spotPrice doubleValue];
     double strike = [self.strikePrice doubleValue];
     double vol = [self.underlyingVolatility doubleValue];
@@ -86,4 +86,5 @@ withExpiration:(NSDate*)expiration
         self.blackScholesPrice = [NSNumber numberWithDouble:option_price_put_black_scholes(spot, strike, risk_free_rate, vol, time)];
     }
 }
+
 @end

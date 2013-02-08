@@ -42,4 +42,6 @@
 
 -(void) calcBlackScholesPrice;
 
+-(void) calcImpliedVolatility;
+
 @end
