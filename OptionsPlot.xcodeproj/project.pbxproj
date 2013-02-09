@@ -16,6 +16,8 @@
 		C5E8029B16C4205500E28297 /* black_scholes_put.mm in Sources */ = {isa = PBXBuildFile; fileRef = C5E8029A16C4205500E28297 /* black_scholes_put.mm */; };
 		C5E8029D16C4221400E28297 /* normdist.mm in Sources */ = {isa = PBXBuildFile; fileRef = C5E8029C16C4221400E28297 /* normdist.mm */; };
 		C5E8029F16C4225400E28297 /* cum_normal.mm in Sources */ = {isa = PBXBuildFile; fileRef = C5E8029E16C4225400E28297 /* cum_normal.mm */; };
+		C5F6B80116C58BD000F914FF /* black_scholes_imp_vol_bisect.cc in Sources */ = {isa = PBXBuildFile; fileRef = C5F6B7FF16C58BD000F914FF /* black_scholes_imp_vol_bisect.cc */; };
+		C5F6B80216C58BD000F914FF /* black_scholes_imp_vol_newt.cc in Sources */ = {isa = PBXBuildFile; fileRef = C5F6B80016C58BD000F914FF /* black_scholes_imp_vol_newt.cc */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -48,6 +50,8 @@
 		C5E8029A16C4205500E28297 /* black_scholes_put.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = black_scholes_put.mm; sourceTree = "<group>"; };
 		C5E8029C16C4221400E28297 /* normdist.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = normdist.mm; sourceTree = "<group>"; };
 		C5E8029E16C4225400E28297 /* cum_normal.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = cum_normal.mm; sourceTree = "<group>"; };
+		C5F6B7FF16C58BD000F914FF /* black_scholes_imp_vol_bisect.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = black_scholes_imp_vol_bisect.cc; sourceTree = "<group>"; };
+		C5F6B80016C58BD000F914FF /* black_scholes_imp_vol_newt.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = black_scholes_imp_vol_newt.cc; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -65,6 +69,8 @@
 		C51A5B3D16C452C900473653 /* FinRecipes */ = {
 			isa = PBXGroup;
 			children = (
+				C5F6B7FF16C58BD000F914FF /* black_scholes_imp_vol_bisect.cc */,
+				C5F6B80016C58BD000F914FF /* black_scholes_imp_vol_newt.cc */,
 				C51A5B3E16C46BC400473653 /* fin_recipes.h */,
 				C5E8029716C4202500E28297 /* normdist.h */,
 				C5E8029E16C4225400E28297 /* cum_normal.mm */,
@@ -190,6 +196,8 @@
 				C5E8029B16C4205500E28297 /* black_scholes_put.mm in Sources */,
 				C5E8029D16C4221400E28297 /* normdist.mm in Sources */,
 				C5E8029F16C4225400E28297 /* cum_normal.mm in Sources */,
+				C5F6B80116C58BD000F914FF /* black_scholes_imp_vol_bisect.cc in Sources */,
+				C5F6B80216C58BD000F914FF /* black_scholes_imp_vol_newt.cc in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

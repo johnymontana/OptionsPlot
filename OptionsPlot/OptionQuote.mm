@@ -22,7 +22,7 @@
     withOpenInterest:(NSNumber*) openInt
        atStrikePrice:(NSNumber*) strikePrice
               ofType:(NSString*) type
-withExpiration:(NSDate*)expiration
+      withExpiration:(NSDate*)expiration
           withVolume:(NSNumber*) volume
  andUnderlyingTicker:(NSString*) underlyingTicker
       withVolatility:(NSNumber *)volatility
@@ -52,7 +52,7 @@ withExpiration:(NSDate*)expiration
 -(NSString*)description
 {
     // TODO: return NSString description of OptionQuote
-    return [NSString stringWithFormat:@"%@: %@ at %@, lastOptPrice: %@, bsPrice: %@, expr:%@ %@, sigma= %@", self.underlyingTicker, self.symbol, self.strikePrice, self.lastPrice, self.blackScholesPrice, [self.expiration descriptionWithCalendarFormat:@"%Y-%m-%d" timeZone:nil locale:nil], self.type, self.underlyingVolatility];
+    return [NSString stringWithFormat:@"%@, spot:%@: %@ at %@, lastOptPrice: %@, bsPrice: %@, expr:%@ %@, sigma= %@, IV=%@", self.underlyingTicker, self.spotPrice, self.symbol, self.strikePrice, self.lastPrice, self.blackScholesPrice, [self.expiration descriptionWithCalendarFormat:@"%Y-%m-%d" timeZone:nil locale:nil], self.type, self.underlyingVolatility, self.impliedVolatility];
 }
 
 -(NSNumber*)underlyingVolatility
@@ -63,7 +63,16 @@ withExpiration:(NSDate*)expiration
 
 -(void) calcImpliedVolatility
 {
+    double risk_free_rate = RISK_FREE_RATE;
+    double time = 0.1;
+    double spot = [self.spotPrice doubleValue];
+    double strike = [self.strikePrice doubleValue];
+    double optionsPrice = [self.lastPrice doubleValue];
     
+    if ([self.type isEqual:@"C"])
+    {
+        self.impliedVolatility = [NSNumber numberWithDouble:option_price_implied_volatility_call_black_scholes_bisections(spot, strike, risk_free_rate, time, optionsPrice)];
+    }
 }
 
 -(void) calcBlackScholesPrice
