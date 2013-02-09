@@ -1,0 +1,17 @@
+\documentclass[]{article}
+\usepackage{pgfplots}
+
+\begin{document}
+
+\title{Title}
+\author{Author}
+\date{Today}
+\maketitle
+
+\begin{tikzpicture}
+\begin{axis}[xlabel=Strike, ylabel=Volatility]
+\addplot+ [scatter, only marks] file{aapl.dat};
+
+\end{axis}
+\end{tikzpicture}
+\end{document}

@@ -72,7 +72,17 @@
     if ([self.type isEqual:@"C"])
     {
         self.impliedVolatility = [NSNumber numberWithDouble:option_price_implied_volatility_call_black_scholes_bisections(spot, strike, risk_free_rate, time, optionsPrice)];
+        
+        if (self.impliedVolatility==[NSNumber numberWithDouble:0])
+        {
+            self.impliedVolatility = [NSNumber numberWithDouble:option_price_implied_volatility_call_black_scholes_newton(spot, strike, risk_free_rate, time, optionsPrice)];
+        }
     }
+    // cannot find implementation of option_price_implied_volatility_put** 
+ //   if ([self.type isEqual:@"P"])
+ //   {
+ //       self.impliedVolatility = [NSNumber numberWithDouble:option_price_implied_volatility_put_black_scholes_bisections(spot, strike, risk_free_rate, time, optionsPrice)];
+//    }
 }
 
 -(void) calcBlackScholesPrice

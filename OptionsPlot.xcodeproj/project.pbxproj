@@ -34,6 +34,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		C50351A416C6E04D00CBEAC2 /* FirstAttempt.tex */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = FirstAttempt.tex; sourceTree = "<group>"; };
 		C51A5B3E16C46BC400473653 /* fin_recipes.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = fin_recipes.h; sourceTree = "<group>"; };
 		C51A5B4316C4778400473653 /* SenTestingKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SenTestingKit.framework; path = Library/Frameworks/SenTestingKit.framework; sourceTree = DEVELOPER_DIR; };
 		C57FDB2516C1B97A0060C293 /* OptionsPlot */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = OptionsPlot; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -133,6 +134,7 @@
 		C57FDB2D16C1B97A0060C293 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				C50351A416C6E04D00CBEAC2 /* FirstAttempt.tex */,
 				C57FDB2E16C1B97A0060C293 /* OptionsPlot-Prefix.pch */,
 			);
 			name = "Supporting Files";
