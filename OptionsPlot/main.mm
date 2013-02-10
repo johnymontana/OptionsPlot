@@ -16,7 +16,7 @@ int main(int argc, const char * argv[])
     @autoreleasepool {
         
         
-        NSArray* tickers = @[@"AAPL"]; // this should be populated from command line arguments
+        NSArray* tickers = @[@"FB"]; // this should be populated from command line arguments
         
         NSArray *quotes = [optionQuoteDownload fetchQuotesFor:tickers];
         
@@ -29,6 +29,7 @@ int main(int argc, const char * argv[])
         
         path = [fm currentDirectoryPath];
         
+        NSMutableDictionary* historicVol = [[NSMutableDictionary alloc] init];
         
         for (OptionQuote* quote in quotes)
         {
@@ -38,6 +39,9 @@ int main(int argc, const char * argv[])
             {
                 [volSmile setObject:quote.impliedVolatility forKey:quote.strikePrice];
             }
+            
+            [historicVol setObject:quote.lastPrice forKey:quote.blackScholesPrice];
+            
             NSLog(@"%@", [quote description]);
             
             
@@ -62,6 +66,17 @@ int main(int argc, const char * argv[])
         
         [datFileString writeToFile:[NSString stringWithFormat:@"%@/coords.dat",datFilePath] atomically:YES encoding:NSUTF8StringEncoding error:nil]; // write coordinates to coords.dat file
         
+        datFileString = [[NSMutableString alloc] init];
+        for (id key in historicVol)
+        {
+            line = [NSString stringWithFormat:@"%@ %@\n", key, historicVol[key]];
+            [datFileString appendString:line];
+            
+        }
+        
+        [datFileString writeToFile:[NSString stringWithFormat:@"%@/hist_coords.dat",datFilePath] atomically:YES encoding:NSUTF8StringEncoding error:nil];
+         
+        
       //  NSLog(@"%@",[optionQuoteDownload calcUnderlyingVolatility:@"MSFT"]);
         
         NSLog(@"Home Path: %@", homeDir);
@@ -72,11 +87,11 @@ int main(int argc, const char * argv[])
         
         // should get user specific paths to executables, this is bad:
         
-        [[NSTask launchedTaskWithLaunchPath:@"/usr/texbin/latex" arguments:[NSArray arrayWithObjects:[NSString stringWithFormat:@"%@OptionsPlot.tex", datFilePath], nil]] waitUntilExit];
+        [[NSTask launchedTaskWithLaunchPath:@"/usr/texbin/pdflatex" arguments:[NSArray arrayWithObjects:[NSString stringWithFormat:@"%@OptionsPlot.tex", datFilePath], nil]] waitUntilExit];
         
-        [[NSTask launchedTaskWithLaunchPath:@"/usr/texbin/dvips" arguments:[NSArray arrayWithObjects:[NSString stringWithFormat:@"%@OptionsPlot.dvi", datFilePath], nil]] waitUntilExit];
+       // [[NSTask launchedTaskWithLaunchPath:@"/usr/texbin/dvips" arguments:[NSArray arrayWithObjects:[NSString stringWithFormat:@"%@OptionsPlot.dvi", datFilePath], nil]] waitUntilExit];
         
-        [NSTask launchedTaskWithLaunchPath:@"/usr/local/bin/ps2pdf" arguments:[NSArray arrayWithObjects:[NSString stringWithFormat:@"%@OptionsPlot.ps", datFilePath], nil]];
+        //[NSTask launchedTaskWithLaunchPath:@"/usr/local/bin/ps2pdf" arguments:[NSArray arrayWithObjects:[NSString stringWithFormat:@"%@OptionsPlot.ps", datFilePath], nil]];
     }
     return 0;
 }

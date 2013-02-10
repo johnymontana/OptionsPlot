@@ -12,7 +12,7 @@
 //#import "black_scholes_put.cc"
 
 
-#define RISK_FREE_RATE 0.25
+#define RISK_FREE_RATE 0.0025
 @implementation OptionQuote
 
 -(id) initWithSymbol:(NSString*)symbol
@@ -88,7 +88,7 @@
 -(void) calcBlackScholesPrice
 {
     double risk_free_rate = RISK_FREE_RATE;
-    double time = 0.1;
+    double time = 0.09;
     double spot = [self.spotPrice doubleValue];
     double strike = [self.strikePrice doubleValue];
     double vol = [self.underlyingVolatility doubleValue];
