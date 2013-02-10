@@ -54,7 +54,7 @@
 -(NSString*)description
 {
     // TODO: return NSString description of OptionQuote
-    return [NSString stringWithFormat:@"%@, spot:%@: %@ at %@, lastOptPrice: %@, bsPrice: %@, expr:%@ %@, sigma= %@, IV=%@", self.underlyingTicker, self.spotPrice, self.symbol, self.strikePrice, self.lastPrice, self.blackScholesPrice, [self.expiration descriptionWithCalendarFormat:@"%Y-%m-%d" timeZone:nil locale:nil], self.type, self.underlyingVolatility, self.impliedVolatility];
+    return [NSString stringWithFormat:@"%@, spot:%@: %@ at %@, lastOptPrice: %@, bsPrice: %@, bsPrice_IV: %@, expr:%@ %@, sigma= %@, IV=%@", self.underlyingTicker, self.spotPrice, self.symbol, self.strikePrice, self.lastPrice, self.blackScholesPrice, self.blackScholesPrice_IV, [self.expiration descriptionWithCalendarFormat:@"%Y-%m-%d" timeZone:nil locale:nil], self.type, self.underlyingVolatility, self.impliedVolatility];
 }
 
 -(NSNumber*)underlyingVolatility
@@ -88,7 +88,7 @@
 }
 
 
--(void) calcBlackScholesPrice
+-(void) calcBlackScholesPrice   // this method sets self.blackScholesPrice using calculated historic volatility
 {
     double risk_free_rate = RISK_FREE_RATE;
     double time = [self.expiration timeIntervalSinceDate:[NSDate date]] / SECONDS_IN_YEAR; // not quite right, should be number of trading days. Could use NSCalendar to compute trading days
@@ -108,6 +108,44 @@
     {
         self.blackScholesPrice = [NSNumber numberWithDouble:option_price_put_black_scholes(spot, strike, risk_free_rate, vol, time)];
     }
+}
+
+-(void) calcBlackScholesPriceUsingVolatility:(NSNumber*) volatility
+{
+    // TODO: set self.blackScholesPrice_IV using volatility
+    double risk_free_rate = RISK_FREE_RATE;
+    double time = [self.expiration timeIntervalSinceDate:[NSDate date]] / SECONDS_IN_YEAR; // not quite right, should be number of trading days. Could use NSCalendar to compute trading days
+    // NSLog(@"time argument: %f:", time);
+    double spot = [self.spotPrice doubleValue];
+    double strike = [self.strikePrice doubleValue];
+    double vol = [volatility doubleValue];
+    
+    if ([self.type isEqual:@"C"])
+    {
+        self.blackScholesPrice_IV = [NSNumber numberWithDouble:option_price_call_black_scholes(spot, strike, risk_free_rate, vol, time)];
+    }
+    
+    else if ([self.type isEqual:@"P"])
+    {
+        self.blackScholesPrice_IV = [NSNumber numberWithDouble:option_price_put_black_scholes(spot, strike, risk_free_rate, vol, time)];
+    }
+
+    
+}
+
+
++(NSNumber*) getImpliedVolatilityInTheMoney:(NSArray *)optionQuotes
+{
+    for (OptionQuote* quote in optionQuotes)
+    {
+        if ([quote.spotPrice doubleValue]>[quote.strikePrice doubleValue] && [quote.spotPrice doubleValue] < ([quote.strikePrice doubleValue]*1.05) && quote.impliedVolatility && [quote.impliedVolatility isNotEqualTo:[NSNumber numberWithDouble:0.0]]) // if quote is just in the money and it's IV is not null or zero, then let's use it's IV
+        {
+            return quote.impliedVolatility;
+        }
+    }
+    
+    NSLog(@"No valid implied volatility found, returning zero");
+    return [NSNumber numberWithDouble:0.0];
 }
 
 @end

@@ -53,7 +53,14 @@
         NSData *jsonData = [[NSString stringWithContentsOfURL:[NSURL URLWithString:query] encoding:NSUTF8StringEncoding error:nil] dataUsingEncoding:NSUTF8StringEncoding];
         NSError *error = nil;
         NSDictionary *results = jsonData ? [NSJSONSerialization JSONObjectWithData:jsonData options:0 error:&error] : nil;
-        if (error) NSLog(@"[%@ %@] JSON error: %@", NSStringFromClass([self class]), NSStringFromSelector(_cmd), error.localizedDescription);
+        if (error)
+        {
+            
+            NSLog(@"[%@ %@] JSON error: %@", NSStringFromClass([self class]), NSStringFromSelector(_cmd), error.localizedDescription);
+            NSLog(@"Yahoo! Finance quotes not available. Try again later. Terminating...");
+            exit(1);
+        }
+        
         NSLog(@"[%@ %@] received %@", NSStringFromClass([self class]), NSStringFromSelector(_cmd), results);
         NSArray *quoteEntries = [results valueForKeyPath:@"query.results.optionsChain.option"];
         
@@ -163,7 +170,12 @@
     NSError *error = nil;
     NSDictionary *results = jsonData ? [NSJSONSerialization JSONObjectWithData:jsonData options:0 error:&error ] : nil;
     
-    if (error) NSLog(@"[%@ %@] JSON error: %@", NSStringFromClass([self class]), NSStringFromSelector(_cmd), error.localizedDescription);
+    if (error)
+    {
+        NSLog(@"[%@ %@] JSON error: %@", NSStringFromClass([self class]), NSStringFromSelector(_cmd), error.localizedDescription);
+        NSLog(@"Yahoo! Finance quotes not available. Try again later. Terminating...");
+        exit(1);
+    }
     NSLog(@"[%@ %@] received %@", NSStringFromClass([self class]), NSStringFromSelector(_cmd), results);
     NSArray* quoteEntries = [results valueForKeyPath:@"query.results.quote"]; // see what we get
     
@@ -209,7 +221,14 @@
     NSError *error = nil;
     NSDictionary *results = jsonData ? [NSJSONSerialization JSONObjectWithData:jsonData options:0 error:&error ] : nil;
     
-    if (error) NSLog(@"[%@ %@] JSON error: %@", NSStringFromClass([self class]), NSStringFromSelector(_cmd), error.localizedDescription);
+    if (error)
+    {
+        
+        NSLog(@"[%@ %@] JSON error: %@", NSStringFromClass([self class]), NSStringFromSelector(_cmd), error.localizedDescription);
+        NSLog(@"Yahoo! Finance quotes not available, try again later. Terminating...");
+        exit(1);
+    }
+    
     NSLog(@"[%@ %@] received %@", NSStringFromClass([self class]), NSStringFromSelector(_cmd), results);
     NSString* lastTradePriceOnly = [results valueForKeyPath:@"query.results.quote.LastTradePriceOnly"]; // see what we get
     NSLog(@"Last Trade price: %@", lastTradePriceOnly);
@@ -217,7 +236,15 @@
     NSNumberFormatter *formatter = [[NSNumberFormatter alloc] init];
     [formatter setNumberStyle:NSNumberFormatterDecimalStyle];
     
-         return [formatter numberFromString:lastTradePriceOnly];
+    if (lastTradePriceOnly)
+    {
+        return [formatter numberFromString:lastTradePriceOnly];
+    }
+    else
+    {
+        NSLog(@"Yahoo! Finance quotes not available. Please try again later. Terminating...");
+        exit(1);
+    }
     
 }
 

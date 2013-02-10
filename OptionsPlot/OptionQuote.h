@@ -22,7 +22,8 @@
 @property (strong, nonatomic) NSString* underlyingTicker;
 @property (strong, nonatomic) NSNumber* underlyingVolatility;
 @property (strong, nonatomic) NSNumber* impliedVolatility;
-@property (strong, nonatomic) NSNumber* blackScholesPrice;
+@property (strong, nonatomic) NSNumber* blackScholesPrice;      // computed using historic volatility
+@property (strong, nonatomic) NSNumber* blackScholesPrice_IV;   // computed using at the money IV
 @property (strong, nonatomic) NSNumber* spotPrice;
 @property (strong, nonatomic) NSDate* expiration;
 
@@ -43,5 +44,9 @@
 -(void) calcBlackScholesPrice;
 
 -(void) calcImpliedVolatility;
+
++(NSNumber*) getImpliedVolatilityInTheMoney:(NSArray*)optionQuotes;
+
+-(void) calcBlackScholesPriceUsingVolatility:(NSNumber*)volatility;
 
 @end

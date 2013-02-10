@@ -20,7 +20,7 @@ int main(int argc, const char * argv[])
         
         NSArray *quotes = [optionQuoteDownload fetchQuotesFor:tickers];
         
-        NSMutableDictionary *volSmile = [[NSMutableDictionary alloc] init];
+        
         NSFileManager *fm;
         fm = [NSFileManager defaultManager];
         NSString *path;
@@ -29,18 +29,26 @@ int main(int argc, const char * argv[])
         
         path = [fm currentDirectoryPath];
         
-        NSMutableDictionary* historicVol = [[NSMutableDictionary alloc] init];
+        NSMutableDictionary* historicVol = [[NSMutableDictionary alloc] init];  // coordinates for historical volatility plot
+        NSMutableDictionary *volSmile = [[NSMutableDictionary alloc] init];     // coordinates for volatility smile plot
+        
+        NSMutableDictionary *impliedVolCoords = [[NSMutableDictionary alloc] init]; // coordinates for implied volatility plot
+        
+        NSNumber* IV = [OptionQuote getImpliedVolatilityInTheMoney:quotes];
         
         for (OptionQuote* quote in quotes)
         {
-            [quote calcBlackScholesPrice];
-            [quote calcImpliedVolatility];
+            [quote calcBlackScholesPrice];                      // TODO: profile this
+            [quote calcImpliedVolatility];                      // TODO: profile this
+            [quote calcBlackScholesPriceUsingVolatility:IV];    // TODO: profile this
+            
             if ([quote.type isEqual:@"C"])
             {
                 [volSmile setObject:quote.impliedVolatility forKey:quote.strikePrice];
             }
             
-            [historicVol setObject:quote.lastPrice forKey:quote.blackScholesPrice];
+            [historicVol setObject:quote.lastPrice forKey:quote.blackScholesPrice]; // coord= (lastPrice, blackScholesPrice)
+            [impliedVolCoords setObject:quote.lastPrice forKey:quote.blackScholesPrice_IV]; // coord = (lastPrice, blackScholesPrice_IV)
             
             NSLog(@"%@", [quote description]);
             
@@ -75,7 +83,15 @@ int main(int argc, const char * argv[])
         }
         
         [datFileString writeToFile:[NSString stringWithFormat:@"%@/hist_coords.dat",datFilePath] atomically:YES encoding:NSUTF8StringEncoding error:nil];
-         
+        
+        datFileString = [[NSMutableString alloc] init];
+        for (id key in impliedVolCoords)
+        {
+            line = [NSString stringWithFormat:@"%@ %@\n", key, impliedVolCoords[key]];
+            [datFileString appendString:line];
+        }
+        
+        [datFileString writeToFile:[NSString stringWithFormat:@"%@/iv_coords.dat", datFilePath] atomically:YES encoding:NSUTF8StringEncoding error:nil];
         
       //  NSLog(@"%@",[optionQuoteDownload calcUnderlyingVolatility:@"MSFT"]);
         
