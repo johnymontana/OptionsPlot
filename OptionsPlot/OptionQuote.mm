@@ -59,7 +59,7 @@
 
 -(NSNumber*)underlyingVolatility
 {
-    // TODO: calulate volatility of
+    // TODO: lazy instantiation? -> No, calc explicityly for profiling
     return _underlyingVolatility;
 }
 
@@ -88,7 +88,7 @@
 }
 
 
--(void) calcBlackScholesPrice   // this method sets self.blackScholesPrice using calculated historic volatility
+-(void) calcBlackScholesPrice   // sets self.blackScholesPrice using calculated historic volatility
 {
     double risk_free_rate = RISK_FREE_RATE;
     double time = [self.expiration timeIntervalSinceDate:[NSDate date]] / SECONDS_IN_YEAR; // not quite right, should be number of trading days. Could use NSCalendar to compute trading days
@@ -136,10 +136,12 @@
 
 +(NSNumber*) getImpliedVolatilityInTheMoney:(NSArray *)optionQuotes
 {
-    for (OptionQuote* quote in optionQuotes)
+    for (OptionQuote* quote in optionQuotes) // These will all be calls since no puts have implied volatilities
     {
-        if ([quote.spotPrice doubleValue]>[quote.strikePrice doubleValue] && [quote.spotPrice doubleValue] < ([quote.strikePrice doubleValue]*1.05) && quote.impliedVolatility && [quote.impliedVolatility isNotEqualTo:[NSNumber numberWithDouble:0.0]]) // if quote is just in the money and it's IV is not null or zero, then let's use it's IV
-        {
+        if ( [quote.spotPrice isGreaterThan:quote.strikePrice] && [quote.impliedVolatility isGreaterThan:[NSNumber numberWithInt:0]] &&
+            [[NSNumber numberWithDouble:0.05]
+             isGreaterThanOrEqualTo:[NSNumber numberWithDouble:(([quote.strikePrice doubleValue]-[quote.spotPrice doubleValue])/[quote.spotPrice doubleValue])]]) // if quote is just in the money and it's IV is not null or zero, then let's use it's IV
+        { 
             return quote.impliedVolatility;
         }
     }

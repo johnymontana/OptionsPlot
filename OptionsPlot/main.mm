@@ -34,14 +34,14 @@ int main(int argc, const char * argv[])
         
         NSMutableDictionary *impliedVolCoords = [[NSMutableDictionary alloc] init]; // coordinates for implied volatility plot
         
-        NSNumber* IV = [OptionQuote getImpliedVolatilityInTheMoney:quotes];
+        NSNumber* IV = [[NSNumber alloc] init];
         
         for (OptionQuote* quote in quotes)
         {
             [quote calcBlackScholesPrice];                      // TODO: profile this
             [quote calcImpliedVolatility];                      // TODO: profile this
             [quote calcBlackScholesPriceUsingVolatility:IV];    // TODO: profile this
-            
+            IV = [OptionQuote getImpliedVolatilityInTheMoney:quotes];
             if ([quote.type isEqual:@"C"])
             {
                 [volSmile setObject:quote.impliedVolatility forKey:quote.strikePrice];
@@ -92,6 +92,22 @@ int main(int argc, const char * argv[])
         }
         
         [datFileString writeToFile:[NSString stringWithFormat:@"%@/iv_coords.dat", datFilePath] atomically:YES encoding:NSUTF8StringEncoding error:nil];
+        
+        NSMutableString* texVars= [[NSMutableString alloc] init];
+        
+        line = [NSString stringWithFormat:@"\\newcommand{\\ticker}{%@ }", tickers[0]];
+        [texVars appendString:line];
+        line = [NSString stringWithFormat:@"\\newcommand{\\expiration}{ %@ }", [[quotes[0] expiration] description]];
+        [texVars appendString:line];
+        line = @"\\newcommand{\\callorput}{ Call}";
+        [texVars appendString:line];
+        line = [NSString stringWithFormat:@"\\newcommand{\\underlyingquote}{%@}", [[quotes[0] spotPrice] description]];
+        [texVars appendString:line];
+        line = [NSString stringWithFormat:@"\\newcommand{\\histvolatility}{%@}", [[quotes[0] underlyingVolatility] description]];
+        [texVars appendString:line];
+        line = [NSString stringWithFormat:@"\\newcommand{\\impliedvolatility}{%@}", [IV description]];
+        [texVars appendString:line];
+        [texVars writeToFile:[NSString stringWithFormat:@"%@/variables.tex", datFilePath] atomically:NO encoding:NSUTF8StringEncoding error:nil];
         
       //  NSLog(@"%@",[optionQuoteDownload calcUnderlyingVolatility:@"MSFT"]);
         

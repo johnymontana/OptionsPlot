@@ -92,8 +92,9 @@
             
             }
             
-            if (quoteEntry[@"lastPrice"])
-            {   [quotes addObject:[[OptionQuote alloc] initWithSymbol:quoteEntry[@"symbol"]
+            if ([quoteEntry[@"lastPrice"] isKindOfClass:[NSString class]]) // TODO: this didn't work as expected
+            {
+                [quotes addObject:[[OptionQuote alloc] initWithSymbol:quoteEntry[@"symbol"]
                                                                andAsk:[formatter numberFromString:quoteEntry[@"ask"]]
                                                                andBid:[formatter numberFromString:quoteEntry[@"bid"]]
                                                           atLastPrice:[formatter numberFromString:quoteEntry[@"lastPrice"]]
