@@ -13,6 +13,8 @@
 
 
 #define RISK_FREE_RATE 0.0025
+#define SECONDS_IN_YEAR 31536000.0
+
 @implementation OptionQuote
 
 -(id) initWithSymbol:(NSString*)symbol
@@ -73,7 +75,7 @@
     {
         self.impliedVolatility = [NSNumber numberWithDouble:option_price_implied_volatility_call_black_scholes_bisections(spot, strike, risk_free_rate, time, optionsPrice)];
         
-        if (self.impliedVolatility==[NSNumber numberWithDouble:0])
+        if (self.impliedVolatility==[NSNumber numberWithDouble:0.0])
         {
             self.impliedVolatility = [NSNumber numberWithDouble:option_price_implied_volatility_call_black_scholes_newton(spot, strike, risk_free_rate, time, optionsPrice)];
         }
@@ -85,10 +87,12 @@
 //    }
 }
 
+
 -(void) calcBlackScholesPrice
 {
     double risk_free_rate = RISK_FREE_RATE;
-    double time = 0.09;
+    double time = [self.expiration timeIntervalSinceDate:[NSDate date]] / SECONDS_IN_YEAR; // not quite right, should be number of trading days. Could use NSCalendar to compute trading days
+   // NSLog(@"time argument: %f:", time);
     double spot = [self.spotPrice doubleValue];
     double strike = [self.strikePrice doubleValue];
     double vol = [self.underlyingVolatility doubleValue];

@@ -16,7 +16,7 @@ int main(int argc, const char * argv[])
     @autoreleasepool {
         
         
-        NSArray* tickers = @[@"FB"]; // this should be populated from command line arguments
+        NSArray* tickers = @[@"AAPL"]; // this should be populated from command line arguments
         
         NSArray *quotes = [optionQuoteDownload fetchQuotesFor:tickers];
         
