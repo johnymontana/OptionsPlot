@@ -5,8 +5,8 @@
 //  Created by lyonwj on 2/5/13.
 //  Copyright (c) 2013 William Lyon. All rights reserved.
 //
-//
-//
+//  Downloads options quotes from Yahoo! Finance, runs Black-Scholes to calculate implied volatilites
+//  Report and plots generated using OptionsPlot.tex Latex template
 
 #import <Foundation/Foundation.h>
 #import "OptionQuoteDownload.h"
@@ -20,7 +20,7 @@ int main(int argc, const char * argv[])
         NSDate* mainStart = [NSDate date];
         NSDate* mainFinish;
         double totalRunningTime;
-        NSArray* tickers = @[@"AAPL"]; // this should be populated from command line arguments
+        NSArray* tickers = @[@"GE"]; // this should be populated from command line arguments
         
         NSFileManager *fm = [NSFileManager defaultManager];
         //NSString *path = [fm currentDirectoryPath];

@@ -17,13 +17,58 @@
     
     [super setUp];
     
-    quote = [[OptionQuote alloc] initWithSymbol:@"AAPL132005" andAsk:[NSNumber numberWithDouble:1.2] andBid:[NSNumber numberWithDouble:3.2] atLastPrice:[NSNumber numberWithDouble:5.5] withOpenInterest:[NSNumber numberWithInt:3331] atStrikePrice:[NSNumber numberWithDouble:15] ofType:@"C" withExpiration:[NSDate dateWithNaturalLanguageString:@"03-14-2013"] withVolume:[NSNumber numberWithInt:55555] andUnderlyingTicker:@"AAPL" withVolatility:[NSNumber numberWithDouble:0.22] andSpotPrice:[NSNumber numberWithInt:20.]];
+    quote = [[OptionQuote alloc] initWithSymbol:@"AAPL130308P0015000"
+                                         andAsk:[NSNumber numberWithDouble:1.2]
+                                         andBid:[NSNumber numberWithDouble:3.2]
+                                    atLastPrice:[NSNumber numberWithDouble:5.5]
+                               withOpenInterest:[NSNumber numberWithInt:3331]
+                                  atStrikePrice:[NSNumber numberWithDouble:15]
+                                         ofType:@"C"
+                                 withExpiration:[NSDate dateWithNaturalLanguageString:@"03-14-2013"]
+                                     withVolume:[NSNumber numberWithInt:55555]
+                            andUnderlyingTicker:@"AAPL"
+                                 withVolatility:[NSNumber numberWithDouble:0.22]
+                                   andSpotPrice:[NSNumber numberWithInt:20.]];
 
-    quote1 = [[OptionQuote alloc] initWithSymbol:@"AAPL130300015" andAsk:[NSNumber numberWithDouble:1.2] andBid:[NSNumber numberWithDouble:3.2] atLastPrice:[NSNumber numberWithDouble:5.5] withOpenInterest:[NSNumber numberWithInt:3331] atStrikePrice:[NSNumber numberWithDouble:19] ofType:@"C" withExpiration:[NSDate dateWithNaturalLanguageString:@"03-14-2013"] withVolume:[NSNumber numberWithInt:55555] andUnderlyingTicker:@"AAPL" withVolatility:[NSNumber numberWithDouble:1.1] andSpotPrice:[NSNumber numberWithInt:20.]];
     
-    quote2 = [[OptionQuote alloc] initWithSymbol:@"AAPL130300015" andAsk:[NSNumber numberWithDouble:1.2] andBid:[NSNumber numberWithDouble:3.2] atLastPrice:[NSNumber numberWithDouble:5.5] withOpenInterest:[NSNumber numberWithInt:3331] atStrikePrice:[NSNumber numberWithDouble:21] ofType:@"C" withExpiration:[NSDate dateWithNaturalLanguageString:@"03-14-2013"] withVolume:[NSNumber numberWithInt:55555] andUnderlyingTicker:@"AAPL" withVolatility:[NSNumber numberWithDouble:1.2] andSpotPrice:[NSNumber numberWithInt:20.]];
+    quote1 = [[OptionQuote alloc] initWithSymbol:@"AAPL130308P00510000"
+                                          andAsk:[NSNumber numberWithDouble:1.2]
+                                          andBid:[NSNumber numberWithDouble:3.2]
+                                     atLastPrice:[NSNumber numberWithDouble:5.5]
+                                withOpenInterest:[NSNumber numberWithInt:3331]
+                                   atStrikePrice:[NSNumber numberWithDouble:19]
+                                          ofType:@"C"
+                                  withExpiration:[NSDate dateWithNaturalLanguageString:@"03-14-2013"]
+                                      withVolume:[NSNumber numberWithInt:55555]
+                             andUnderlyingTicker:@"AAPL"
+                                  withVolatility:[NSNumber numberWithDouble:1.1]
+                                    andSpotPrice:[NSNumber numberWithInt:20.]];
+    
+    quote2 = [[OptionQuote alloc] initWithSymbol:@"AAPL130308P00510000"
+                                          andAsk:[NSNumber numberWithDouble:1.2]
+                                          andBid:[NSNumber numberWithDouble:3.2]
+                                     atLastPrice:[NSNumber numberWithDouble:5.5]
+                                withOpenInterest:[NSNumber numberWithInt:3331]
+                                   atStrikePrice:[NSNumber numberWithDouble:21]
+                                          ofType:@"C"
+                                  withExpiration:[NSDate dateWithNaturalLanguageString:@"03-14-2013"]
+                                      withVolume:[NSNumber numberWithInt:55555]
+                             andUnderlyingTicker:@"AAPL"
+                                  withVolatility:[NSNumber numberWithDouble:1.2]
+                                    andSpotPrice:[NSNumber numberWithInt:20.]];
 
-    quote3 = [[OptionQuote alloc] initWithSymbol:@"AAPL130300015" andAsk:[NSNumber numberWithDouble:1.2] andBid:[NSNumber numberWithDouble:3.2] atLastPrice:[NSNumber numberWithDouble:5.5] withOpenInterest:[NSNumber numberWithInt:3331] atStrikePrice:[NSNumber numberWithDouble:18] ofType:@"C" withExpiration:[NSDate dateWithNaturalLanguageString:@"03-14-2013"] withVolume:[NSNumber numberWithInt:55555] andUnderlyingTicker:@"AAPL" withVolatility:[NSNumber numberWithDouble:1.3] andSpotPrice:[NSNumber numberWithInt:20.]];
+    quote3 = [[OptionQuote alloc] initWithSymbol:@"AAPL130308P00510000"
+                                          andAsk:[NSNumber numberWithDouble:1.2]
+                                          andBid:[NSNumber numberWithDouble:3.2]
+                                     atLastPrice:[NSNumber numberWithDouble:5.5]
+                                withOpenInterest:[NSNumber numberWithInt:3331]
+                                   atStrikePrice:[NSNumber numberWithDouble:18]
+                                          ofType:@"C"
+                                  withExpiration:[NSDate dateWithNaturalLanguageString:@"03-14-2013"]
+                                      withVolume:[NSNumber numberWithInt:55555]
+                             andUnderlyingTicker:@"AAPL"
+                                  withVolatility:[NSNumber numberWithDouble:1.3]
+                                    andSpotPrice:[NSNumber numberWithInt:20.]];
 
     arrayOfQuotes=@[quote, quote1, quote2, quote3];
     
@@ -44,6 +89,7 @@
        STAssertNotNil(quote, @"create new OptionQuote instance");
 }
 
+
 -(void)testBlackScholesPrice
 {
     // call [quote calcBlackScholesPrice] and compare quote.blackScholoesPrice
@@ -59,6 +105,29 @@
     
     STAssertEqualsWithAccuracy(callPrice, callPriceVerified, 0.001, @"Fin recipes C++ library BS call price calc");
     
+}
+
+-(void)testImpliedVolatilityCalc
+{
+    OptionQuote* myQuote = [[OptionQuote alloc] initWithSymbol:@"AAPL130308P00510000"
+                                          andAsk:[NSNumber numberWithDouble:1.2]
+                                          andBid:[NSNumber numberWithDouble:3.2]
+                                     atLastPrice:[NSNumber numberWithDouble:2]
+                                withOpenInterest:[NSNumber numberWithInt:3331]
+                                   atStrikePrice:[NSNumber numberWithDouble:19]
+                                          ofType:@"C"
+                                  withExpiration:[NSDate dateWithNaturalLanguageString:@"03-14-2014"]
+                                      withVolume:[NSNumber numberWithInt:55555]
+                             andUnderlyingTicker:@"AAPL"
+                                  withVolatility:[NSNumber numberWithDouble:1.1]
+                                    andSpotPrice:[NSNumber numberWithInt:20.]];
+    
+    [myQuote calcImpliedVolatility];
+    
+    double verifiedIV = 0.17885;            // calculated using http://www.quantwolf.com/calculators/impliedvolatilitycalc.html
+    
+    STAssertEqualsWithAccuracy(verifiedIV, [[myQuote impliedVolatility] doubleValue], 0.01, @"Confirm implied volatility calc and set correctly");   // this level of accuracy is probably not acceptable
+
 }
 
 -(void)testGetImpliedVolatilityInTheMoney

@@ -64,7 +64,8 @@
 -(void) calcImpliedVolatility
 {
     double risk_free_rate = RISK_FREE_RATE;
-    double time = 0.1;
+    double time = [self.expiration timeIntervalSinceDate:[NSDate date]] / SECONDS_IN_YEAR; // not quite right, should be number of trading days. Could use NSCalendar to compute trading days
+
     double spot = [self.spotPrice doubleValue];
     double strike = [self.strikePrice doubleValue];
     double optionsPrice = [self.lastPrice doubleValue];
