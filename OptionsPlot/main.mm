@@ -7,7 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "optionQuoteDownload.h"
+#import "OptionQuoteDownload.h"
 #import "OptionQuote.h"
 
 int main(int argc, const char * argv[])
@@ -16,9 +16,10 @@ int main(int argc, const char * argv[])
     @autoreleasepool {
         
         
-        NSArray* tickers = @[@"AAPL"]; // this should be populated from command line arguments
+        NSArray* tickers = @[@"ORCL"]; // this should be populated from command line arguments
         
-        NSArray *quotes = [optionQuoteDownload fetchQuotesFor:tickers];
+        
+        NSArray *quotes = [OptionQuoteDownload fetchQuotesFor:tickers];
         
         
         NSFileManager *fm;
@@ -35,12 +36,29 @@ int main(int argc, const char * argv[])
         NSMutableDictionary *impliedVolCoords = [[NSMutableDictionary alloc] init]; // coordinates for implied volatility plot
         
         NSNumber* IV = [[NSNumber alloc] init];
+        int funcCallCount = 0;
+        double timeForCalcBSPrice = 0.;
+        double timeForCalcIV = 0.;
+        double timeForCalcBSPriceUsingIV = 0.;
         
         for (OptionQuote* quote in quotes)
         {
+            NSDate* methodStart = [NSDate date];
             [quote calcBlackScholesPrice];                      // TODO: profile this
+            NSDate* methodFinish = [NSDate date];
+            timeForCalcBSPrice += [methodFinish timeIntervalSinceDate:methodStart];
+            // NSLog(@"Time to execute calcBlackScholes: %f", exeTime);
+            
+            methodStart = [NSDate date];
             [quote calcImpliedVolatility];                      // TODO: profile this
+            methodFinish = [NSDate date];
+            timeForCalcIV += [methodFinish timeIntervalSinceDate:methodStart];
+            
+            methodStart = [NSDate date];
             [quote calcBlackScholesPriceUsingVolatility:IV];    // TODO: profile this
+            methodFinish = [NSDate date];
+            timeForCalcBSPriceUsingIV += [methodFinish timeIntervalSinceDate:methodStart];
+            
             IV = [OptionQuote getImpliedVolatilityInTheMoney:quotes];
             if ([quote.type isEqual:@"C"])
             {
@@ -54,7 +72,10 @@ int main(int argc, const char * argv[])
             
             
           //  NSLog(@"BS Price: %@", quote.blackScholesPrice);
+            funcCallCount++;
         }
+        
+        
         
         NSLog(@"%@", volSmile);
         
@@ -124,6 +145,10 @@ int main(int argc, const char * argv[])
        // [[NSTask launchedTaskWithLaunchPath:@"/usr/texbin/dvips" arguments:[NSArray arrayWithObjects:[NSString stringWithFormat:@"%@OptionsPlot.dvi", datFilePath], nil]] waitUntilExit];
         
         //[NSTask launchedTaskWithLaunchPath:@"/usr/local/bin/ps2pdf" arguments:[NSArray arrayWithObjects:[NSString stringWithFormat:@"%@OptionsPlot.ps", datFilePath], nil]];
+        NSLog(@"Avg CPU time for CalcBSPrice: %f", timeForCalcBSPrice/funcCallCount);
+        NSLog(@"Avg CPU time for CalcBSPriceUsingIV: %f", timeForCalcBSPriceUsingIV/funcCallCount);
+        NSLog(@"Avg CPU time for CalcIV: %f", timeForCalcIV/funcCallCount);
+    
     }
     return 0;
 }

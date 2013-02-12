@@ -10,7 +10,7 @@
 		C57FDB2916C1B97A0060C293 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C57FDB2816C1B97A0060C293 /* Foundation.framework */; };
 		C57FDB2C16C1B97A0060C293 /* main.mm in Sources */ = {isa = PBXBuildFile; fileRef = C57FDB2B16C1B97A0060C293 /* main.mm */; };
 		C57FDB3016C1B97A0060C293 /* OptionsPlot.1 in CopyFiles */ = {isa = PBXBuildFile; fileRef = C57FDB2F16C1B97A0060C293 /* OptionsPlot.1 */; };
-		C57FDB3816C1BA260060C293 /* optionQuoteDownload.mm in Sources */ = {isa = PBXBuildFile; fileRef = C57FDB3716C1BA260060C293 /* optionQuoteDownload.mm */; };
+		C57FDB3816C1BA260060C293 /* OptionQuoteDownload.mm in Sources */ = {isa = PBXBuildFile; fileRef = C57FDB3716C1BA260060C293 /* OptionQuoteDownload.mm */; };
 		C57FDB3B16C1D1A50060C293 /* OptionQuote.mm in Sources */ = {isa = PBXBuildFile; fileRef = C57FDB3A16C1D1A50060C293 /* OptionQuote.mm */; };
 		C5E8029916C4204700E28297 /* black_scholes_call.mm in Sources */ = {isa = PBXBuildFile; fileRef = C5E8029816C4204700E28297 /* black_scholes_call.mm */; };
 		C5E8029B16C4205500E28297 /* black_scholes_put.mm in Sources */ = {isa = PBXBuildFile; fileRef = C5E8029A16C4205500E28297 /* black_scholes_put.mm */; };
@@ -41,8 +41,8 @@
 		C57FDB2B16C1B97A0060C293 /* main.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = main.mm; sourceTree = "<group>"; };
 		C57FDB2E16C1B97A0060C293 /* OptionsPlot-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "OptionsPlot-Prefix.pch"; sourceTree = "<group>"; };
 		C57FDB2F16C1B97A0060C293 /* OptionsPlot.1 */ = {isa = PBXFileReference; lastKnownFileType = text.man; path = OptionsPlot.1; sourceTree = "<group>"; };
-		C57FDB3616C1BA260060C293 /* optionQuoteDownload.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = optionQuoteDownload.h; sourceTree = "<group>"; };
-		C57FDB3716C1BA260060C293 /* optionQuoteDownload.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = optionQuoteDownload.mm; sourceTree = "<group>"; };
+		C57FDB3616C1BA260060C293 /* OptionQuoteDownload.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OptionQuoteDownload.h; sourceTree = "<group>"; };
+		C57FDB3716C1BA260060C293 /* OptionQuoteDownload.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OptionQuoteDownload.mm; sourceTree = "<group>"; };
 		C57FDB3916C1D1A50060C293 /* OptionQuote.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OptionQuote.h; sourceTree = "<group>"; };
 		C57FDB3A16C1D1A50060C293 /* OptionQuote.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OptionQuote.mm; sourceTree = "<group>"; };
 		C5E8029716C4202500E28297 /* normdist.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = normdist.h; sourceTree = "<group>"; };
@@ -122,8 +122,8 @@
 				C57FDB2B16C1B97A0060C293 /* main.mm */,
 				C57FDB3916C1D1A50060C293 /* OptionQuote.h */,
 				C57FDB3A16C1D1A50060C293 /* OptionQuote.mm */,
-				C57FDB3616C1BA260060C293 /* optionQuoteDownload.h */,
-				C57FDB3716C1BA260060C293 /* optionQuoteDownload.mm */,
+				C57FDB3616C1BA260060C293 /* OptionQuoteDownload.h */,
+				C57FDB3716C1BA260060C293 /* OptionQuoteDownload.mm */,
 				C57FDB2F16C1B97A0060C293 /* OptionsPlot.1 */,
 				C57FDB2D16C1B97A0060C293 /* Supporting Files */,
 			);
@@ -190,7 +190,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				C57FDB2C16C1B97A0060C293 /* main.mm in Sources */,
-				C57FDB3816C1BA260060C293 /* optionQuoteDownload.mm in Sources */,
+				C57FDB3816C1BA260060C293 /* OptionQuoteDownload.mm in Sources */,
 				C57FDB3B16C1D1A50060C293 /* OptionQuote.mm in Sources */,
 				C5E8029916C4204700E28297 /* black_scholes_call.mm in Sources */,
 				C5E8029B16C4205500E28297 /* black_scholes_put.mm in Sources */,

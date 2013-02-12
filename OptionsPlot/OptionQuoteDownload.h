@@ -8,7 +8,7 @@
 
 #import <Foundation/Foundation.h>
 
-@interface optionQuoteDownload : NSObject
+@interface OptionQuoteDownload : NSObject
 
 +(NSArray*) fetchQuotesFor:(NSArray*) tickers;
 

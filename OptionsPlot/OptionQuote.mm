@@ -75,7 +75,7 @@
     {
         self.impliedVolatility = [NSNumber numberWithDouble:option_price_implied_volatility_call_black_scholes_bisections(spot, strike, risk_free_rate, time, optionsPrice)];
         
-        if (self.impliedVolatility==[NSNumber numberWithDouble:0.0])
+        if ([self.impliedVolatility isEqualToNumber:[NSNumber numberWithDouble:0.0]])
         {
             self.impliedVolatility = [NSNumber numberWithDouble:option_price_implied_volatility_call_black_scholes_newton(spot, strike, risk_free_rate, time, optionsPrice)];
         }
@@ -133,7 +133,7 @@
     
 }
 
-
+// TODO: THIS DOESN'T WORK - do something like search for an integer match on spot-1, etc.
 +(NSNumber*) getImpliedVolatilityInTheMoney:(NSArray *)optionQuotes
 {
     for (OptionQuote* quote in optionQuotes) // These will all be calls since no puts have implied volatilities

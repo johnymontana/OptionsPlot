@@ -6,10 +6,10 @@
 //  Copyright (c) 2013 William Lyon. All rights reserved.
 //
 
-#import "optionQuoteDownload.h"
+#import "OptionQuoteDownload.h"
 #import "OptionQuote.h"
 
-@implementation optionQuoteDownload
+@implementation OptionQuoteDownload
 
 //select option
 //from yahoo.finance.options
@@ -76,8 +76,8 @@
         NSNumberFormatter *formatter = [[NSNumberFormatter alloc] init];
         [formatter setNumberStyle:NSNumberFormatterDecimalStyle];
         
-        NSNumber* volatility = [optionQuoteDownload calcUnderlyingVolatility:assetTicker];
-        NSNumber* spot = [optionQuoteDownload getCurrentPrice:assetTicker];
+        NSNumber* volatility = [OptionQuoteDownload calcUnderlyingVolatility:assetTicker];
+        NSNumber* spot = [OptionQuoteDownload getCurrentPrice:assetTicker];
         
         for (NSDictionary *quoteEntry in quoteEntries) {
             
@@ -237,7 +237,7 @@
     NSNumberFormatter *formatter = [[NSNumberFormatter alloc] init];
     [formatter setNumberStyle:NSNumberFormatterDecimalStyle];
     
-    if (lastTradePriceOnly)
+    if ([lastTradePriceOnly isKindOfClass:[NSString class]])
     {
         return [formatter numberFromString:lastTradePriceOnly];
     }
