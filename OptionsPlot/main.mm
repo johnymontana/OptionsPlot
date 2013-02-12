@@ -16,21 +16,23 @@ int main(int argc, const char * argv[])
     @autoreleasepool {
         
         
-        NSArray* tickers = @[@"ORCL"]; // this should be populated from command line arguments
+        NSArray* tickers = @[@"GOOG"]; // this should be populated from command line arguments
+        
+        int funcCallCount = 0;                  // used for profiling method calls
+        double timeForCalcBSPrice = 0.;
+        double timeForCalcIV = 0.;
+        double timeForCalcBSPriceUsingIV = 0.;
         
         NSDate* methodStart = [NSDate date];
-        NSArray *quotes = [OptionQuoteDownload fetchQuotesFor:tickers];
+        NSArray *quotes = [OptionQuoteDownload fetchQuotesFor:tickers];     // download options quotes
         NSDate* methodFinish = [NSDate date];
-        
         double timeForOptionQuoteDownload = [methodFinish timeIntervalSinceDate:methodStart];
         
-        NSFileManager *fm;
-        fm = [NSFileManager defaultManager];
-        NSString *path;
-        NSString* homeDir;
-        homeDir = NSHomeDirectory(); // get path to home dir
+        NSFileManager *fm = [NSFileManager defaultManager];
+        NSString *path = [fm currentDirectoryPath];
+        NSString* homeDir = NSHomeDirectory(); // get path to home dir
         
-        path = [fm currentDirectoryPath];
+
         
         NSMutableDictionary* historicVol = [[NSMutableDictionary alloc] init];  // coordinates for historical volatility plot
         NSMutableDictionary *volSmile = [[NSMutableDictionary alloc] init];     // coordinates for volatility smile plot
@@ -38,35 +40,34 @@ int main(int argc, const char * argv[])
         NSMutableDictionary *impliedVolCoords = [[NSMutableDictionary alloc] init]; // coordinates for implied volatility plot
         
         NSNumber* IV = [[NSNumber alloc] init];
-        int funcCallCount = 0;
-        double timeForCalcBSPrice = 0.;
-        double timeForCalcIV = 0.;
-        double timeForCalcBSPriceUsingIV = 0.;
+        
+        
         
         for (OptionQuote* quote in quotes)
         {
             NSDate* methodStart = [NSDate date];
-            [quote calcBlackScholesPrice];                      // TODO: profile this
+            [quote calcBlackScholesPrice];                      // update quotes with BS price
             NSDate* methodFinish = [NSDate date];
             timeForCalcBSPrice += [methodFinish timeIntervalSinceDate:methodStart];
             // NSLog(@"Time to execute calcBlackScholes: %f", exeTime);
             
             methodStart = [NSDate date];
-            [quote calcImpliedVolatility];                      // TODO: profile this
+            [quote calcImpliedVolatility];                      // update quotes with IVs
             methodFinish = [NSDate date];
             timeForCalcIV += [methodFinish timeIntervalSinceDate:methodStart];
-            
+            IV = [OptionQuote getImpliedVolatilityInTheMoney:quotes];
             methodStart = [NSDate date];
-            [quote calcBlackScholesPriceUsingVolatility:IV];    // TODO: profile this
+            [quote calcBlackScholesPriceUsingVolatility:IV];    // update quotes with BS price using at-the-money IV
             methodFinish = [NSDate date];
             timeForCalcBSPriceUsingIV += [methodFinish timeIntervalSinceDate:methodStart];
             
-            IV = [OptionQuote getImpliedVolatilityInTheMoney:quotes];
-            if ([quote.type isEqual:@"C"])
+            
+            if ([quote.type isEqual:@"C"])      // set coords for volatility smile (calls only)
             {
                 [volSmile setObject:quote.impliedVolatility forKey:quote.strikePrice];
             }
             
+            // set coords for mrkt vs. bs price (historic volatility & IV)
             [historicVol setObject:quote.lastPrice forKey:quote.blackScholesPrice]; // coord= (lastPrice, blackScholesPrice)
             [impliedVolCoords setObject:quote.lastPrice forKey:quote.blackScholesPrice_IV]; // coord = (lastPrice, blackScholesPrice_IV)
             
@@ -82,7 +83,11 @@ int main(int argc, const char * argv[])
         NSLog(@"%@", volSmile);
         
         NSString* line; // will hold a single (strike, volatility) coordinate
-        NSMutableString* datFileString = [[NSMutableString alloc] init];
+        NSMutableString* datFileString = [[NSMutableString alloc] init]; // to be written to dat file
+        
+        
+        // BEGIN gen tex report
+        methodStart = [NSDate date];
         for (id key in volSmile)
         {
             line = [NSString stringWithFormat:@"%@ %@\n", key, volSmile[key]]; // get (strike, volatility) coordinate
@@ -118,6 +123,7 @@ int main(int argc, const char * argv[])
         
         NSMutableString* texVars= [[NSMutableString alloc] init];
         
+        // Define latex macros to use in template.tex
         line = [NSString stringWithFormat:@"\\newcommand{\\ticker}{%@ }", tickers[0]];
         [texVars appendString:line];
         line = [NSString stringWithFormat:@"\\newcommand{\\expiration}{ %@ }", [[quotes[0] expiration] description]];
@@ -132,8 +138,7 @@ int main(int argc, const char * argv[])
         [texVars appendString:line];
         [texVars writeToFile:[NSString stringWithFormat:@"%@/variables.tex", datFilePath] atomically:NO encoding:NSUTF8StringEncoding error:nil];
         
-      //  NSLog(@"%@",[optionQuoteDownload calcUnderlyingVolatility:@"MSFT"]);
-        
+              
         NSLog(@"Home Path: %@", homeDir);
         NSLog(@"Dat file path: %@", datFilePath);
         NSLog(@"Current dir: %@", path);                
@@ -144,13 +149,18 @@ int main(int argc, const char * argv[])
         
         [[NSTask launchedTaskWithLaunchPath:@"/usr/texbin/pdflatex" arguments:[NSArray arrayWithObjects:[NSString stringWithFormat:@"%@OptionsPlot.tex", datFilePath], nil]] waitUntilExit];
         
-       // [[NSTask launchedTaskWithLaunchPath:@"/usr/texbin/dvips" arguments:[NSArray arrayWithObjects:[NSString stringWithFormat:@"%@OptionsPlot.dvi", datFilePath], nil]] waitUntilExit];
+        methodFinish = [NSDate date];
+        double timeForGenTexPDF = [methodFinish timeIntervalSinceDate:methodStart];
+        // don't need dvips, ps2pdf if using pdflatex
+        // [[NSTask launchedTaskWithLaunchPath:@"/usr/texbin/dvips" arguments:[NSArray arrayWithObjects:[NSString stringWithFormat:@"%@OptionsPlot.dvi", datFilePath], nil]] waitUntilExit];
         
         //[NSTask launchedTaskWithLaunchPath:@"/usr/local/bin/ps2pdf" arguments:[NSArray arrayWithObjects:[NSString stringWithFormat:@"%@OptionsPlot.ps", datFilePath], nil]];
-        NSLog(@"Avg CPU time for CalcBSPrice: %f millisecs", (timeForCalcBSPrice/funcCallCount)*1000.);
-        NSLog(@"Avg CPU time for CalcBSPriceUsingIV: %f millisecs", (timeForCalcBSPriceUsingIV/funcCallCount)*1000.);
-        NSLog(@"Avg CPU time for CalcIV: %f millisecs", (timeForCalcIV/funcCallCount)*1000.);
-        NSLog(@"CPU time for OptionQuoteDownload: %f secs", timeForOptionQuoteDownload);
+        
+        NSLog(@"Avg time for CalcBSPrice: %f millisecs", (timeForCalcBSPrice/funcCallCount)*1000.);
+        NSLog(@"Avg time for CalcBSPriceUsingIV: %f millisecs", (timeForCalcBSPriceUsingIV/funcCallCount)*1000.);
+        NSLog(@"Avg time for CalcIV: %f millisecs", (timeForCalcIV/funcCallCount)*1000.);
+        NSLog(@"Time for OptionQuoteDownload: %f secs", timeForOptionQuoteDownload);
+        NSLog(@"Time to generate tex/PDF: %f secs", timeForGenTexPDF);
     
     }
     return 0;

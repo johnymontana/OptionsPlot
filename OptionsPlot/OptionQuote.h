@@ -5,6 +5,7 @@
 //  Created by lyonwj on 2/5/13.
 //  Copyright (c) 2013 William Lyon. All rights reserved.
 //
+// This class holds all data 
 
 #import <Foundation/Foundation.h>
 
@@ -19,7 +20,7 @@
 @property (strong, nonatomic) NSString* symbol;
 @property (strong, nonatomic) NSString* type;
 @property (strong, nonatomic) NSNumber* volume;
-@property (strong, nonatomic) NSString* underlyingTicker;
+@property (strong, nonatomic) NSString* underlyingTicker;       // collection should be used for all underlying data, should point to an UnderLying asset object
 @property (strong, nonatomic) NSNumber* underlyingVolatility;
 @property (strong, nonatomic) NSNumber* impliedVolatility;
 @property (strong, nonatomic) NSNumber* blackScholesPrice;      // computed using historic volatility
@@ -28,7 +29,7 @@
 @property (strong, nonatomic) NSDate* expiration;
 
 
--(id) initWithSymbol:(NSString*)symbol
+-(id) initWithSymbol:(NSString*)symbol                          // default init
               andAsk:(NSNumber*) ask
               andBid:(NSNumber*) bid
          atLastPrice:(NSNumber*) lastPrice
@@ -41,12 +42,13 @@
       withVolatility:(NSNumber*) volatility
         andSpotPrice:(NSNumber*) spot;
 
--(void) calcBlackScholesPrice;
+// these are set up to be called explicitly from main() for profiling
+-(void) calcBlackScholesPrice;                                  // set Black-Scholes price
 
--(void) calcImpliedVolatility;
+-(void) calcImpliedVolatility;                                  // set IV
 
 +(NSNumber*) getImpliedVolatilityInTheMoney:(NSArray*)optionQuotes;
 
--(void) calcBlackScholesPriceUsingVolatility:(NSNumber*)volatility;
+-(void) calcBlackScholesPriceUsingVolatility:(NSNumber*)volatility; // set BS price using a specified IV
 
 @end

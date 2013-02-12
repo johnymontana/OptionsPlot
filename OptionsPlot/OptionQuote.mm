@@ -8,8 +8,7 @@
 
 #import "OptionQuote.h"
 #import "fin_recipes.h"
-//#import "black_scholes_call.mm"
-//#import "black_scholes_put.cc"
+
 
 
 #define RISK_FREE_RATE 0.0025
@@ -53,7 +52,6 @@
 
 -(NSString*)description
 {
-    // TODO: return NSString description of OptionQuote
     return [NSString stringWithFormat:@"%@, spot:%@: %@ at %@, lastOptPrice: %@, bsPrice: %@, bsPrice_IV: %@, expr:%@ %@, sigma= %@, IV=%@", self.underlyingTicker, self.spotPrice, self.symbol, self.strikePrice, self.lastPrice, self.blackScholesPrice, self.blackScholesPrice_IV, [self.expiration descriptionWithCalendarFormat:@"%Y-%m-%d" timeZone:nil locale:nil], self.type, self.underlyingVolatility, self.impliedVolatility];
 }
 
@@ -133,18 +131,31 @@
     
 }
 
-// TODO: THIS DOESN'T WORK - do something like search for an integer match on spot-1, etc.
+
 +(NSNumber*) getImpliedVolatilityInTheMoney:(NSArray *)optionQuotes
 {
-    for (OptionQuote* quote in optionQuotes) // These will all be calls since no puts have implied volatilities
+    // Find OptionQuote in the money and return its implied volatility
+    // This assumes calls only since no puts have IV at this point, need to deal with puts as well
+    
+    OptionQuote* firstQuote = optionQuotes[0];
+    NSNumber* targetStrike = [NSNumber numberWithInt:[firstQuote.spotPrice intValue]];
+    
+    while ([targetStrike isGreaterThan:[NSNumber numberWithInt:0]])
     {
-        if ( [quote.spotPrice isGreaterThan:quote.strikePrice] && [quote.impliedVolatility isGreaterThan:[NSNumber numberWithInt:0]] &&
-            [[NSNumber numberWithDouble:0.05]
-             isGreaterThanOrEqualTo:[NSNumber numberWithDouble:(([quote.strikePrice doubleValue]-[quote.spotPrice doubleValue])/[quote.spotPrice doubleValue])]]) // if quote is just in the money and it's IV is not null or zero, then let's use it's IV
-        { 
-            return quote.impliedVolatility;
+        
+        for (OptionQuote* quote in optionQuotes)
+        {
+            if ([quote.strikePrice isEqualToNumber:targetStrike])
+            {
+                return quote.impliedVolatility;
+            }
         }
+        
+        targetStrike = [NSNumber numberWithInt:([targetStrike intValue]-1)]; // no OptionQuote found at this strike, lower target strike price
+    
+        
     }
+   
     
     NSLog(@"No valid implied volatility found, returning zero");
     return [NSNumber numberWithDouble:0.0];

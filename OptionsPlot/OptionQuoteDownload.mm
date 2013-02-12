@@ -5,39 +5,27 @@
 //  Created by lyonwj on 2/5/13.
 //  Copyright (c) 2013 William Lyon. All rights reserved.
 //
+//
+// This class handles YQL query for option quote fetching and calculates historic volatility from stock quotes
 
 #import "OptionQuoteDownload.h"
 #import "OptionQuote.h"
 
 @implementation OptionQuoteDownload
 
-//select option
-//from yahoo.finance.options
-//where symbol = "AAPL"
-//and expiration = "2011-07"
-//and option.symbol = "AAPL110716C00155000"
-
-// http://stackoverflow.com/questions/6442737/get-financial-option-data-with-yql
-
-//#define QUOTE_QUERY_PREFIX @"http://query.yahooapis.com/v1/public/yql?q=select%20symbol%2C%20BidRealtime%20from%20yahoo.finance.quotes%20where%20symbol%20in%20("
-//#define QUOTE_QUERY_SUFFIX @")&format=json&env=store%3A%2F%2Fdatatables.org%2Falltableswithkeys&callback="
-
-//#define QUOTE_QUERY_PREFIX @"http://query.yahooapis.com/v1/public/yql?q=select%20*%20from%20yahoo.finance.options%20where%20symbol%20in%20("
-
-//#define QUOTE_QUERY_SUFFIX @")&diagnostics=true&env=http%3A%2F%2Fdatatables.org%2Falltables.env"
-
-//http://query.yahooapis.com/v1/public/yql?q=SELECT%20*%20FROM%20yahoo.finance.options%20WHERE%20symbol%3D'GOOG'%20and%20expiration%3D%222013-03%22&format=json&env=store%3A%2F%2Fdatatables.org%2Falltableswithkeys&callback=
+// adapted from: http://tech.element77.com/2012/02/fetching-stock-data-from-yahoo-for-ios.html
 
 // TODO: fix expiration date issue
 // for now, March 2013 is hardcoded, and 2013-03-15 is hardcoded for expiration
+
 #define QUOTE_QUERY_PREFIX @"http://query.yahooapis.com/v1/public/yql?q=select%20*%20from%20yahoo.finance.options%20where%20symbol%20in%20("
 #define QUOTE_QUERY_SUFFIX @")%20and%20expiration%3D%222013-03%22&format=json&diagnostics=false&env=http%3A%2F%2Fdatatables.org%2Falltables.env&callback="
 
 + (NSArray *)fetchQuotesFor:(NSArray *)tickers
 {
-    // NSMutableDictionary *quotes;  // this should probably be an NSMutableArray
+    
     NSMutableArray *quotes = [[NSMutableArray alloc] init];
-    // REFACTOR THIS:
+    // TODO: REFACTOR THIS:
     NSString* assetTicker = tickers[0];
     
     if (tickers && [tickers count] > 0) {
@@ -83,8 +71,7 @@
             
             NSLog(@"Expiration date: %@", expirationDate);
             
-            // TODO: init OptionQuote object with quote data and add to quote (NSArray?) dict - DONE
-            // TODO: how to cast these things to the correct data type?!?! Things with . are strings, NSUIntegers?
+            
             // NSLog(@"Strike: %@", quoteEntry[@"strikePrice"]);
             for (id key in quoteEntry)
             {
@@ -92,7 +79,7 @@
             
             }
             
-            if ([quoteEntry[@"lastPrice"] isKindOfClass:[NSString class]]) // TODO: this didn't work as expected
+            if ([quoteEntry[@"lastPrice"] isKindOfClass:[NSString class]]) 
             {
                 [quotes addObject:[[OptionQuote alloc] initWithSymbol:quoteEntry[@"symbol"]
                                                                andAsk:[formatter numberFromString:quoteEntry[@"ask"]]
@@ -113,6 +100,8 @@
     }
     return quotes;
 }
+
+// standardDeviationOf: adapted from http://stackoverflow.com/questions/4889486/obj-c-calculate-the-standard-deviation-of-an-nsarray-of-nsnumber-objects
 
 + (NSNumber *)meanOf:(NSArray *)array
 {
@@ -150,12 +139,9 @@
 
 +(NSNumber*)calcUnderlyingVolatility:(NSString *)ticker
 {
-    //TODO: calc volatility for underlying asset ONCE, and save to underlyingVolatility property
-    // TODO: NSDate, NSDateFormatter, NSCalendar(maybe) - how to get start and end dates
     
     //select Adj_Close from yahoo.finance.historicaldata where symbol = "YHOO" and startDate = "2009-09-11" and endDate = "2010-03-10"
     
-    // volatility = stddev(quote series) ???
     
     NSMutableArray* histQuotes = [[NSMutableArray alloc] init];
     NSMutableString* query = [[NSMutableString alloc] init];

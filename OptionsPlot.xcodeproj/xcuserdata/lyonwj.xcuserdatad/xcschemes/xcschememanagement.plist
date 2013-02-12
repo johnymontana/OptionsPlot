@@ -9,9 +9,29 @@
 			<key>orderHint</key>
 			<integer>0</integer>
 		</dict>
+		<key>OptionsPlot_TEST.xcscheme</key>
+		<dict>
+			<key>orderHint</key>
+			<integer>1</integer>
+		</dict>
+		<key>OptionsPlot_Tests.xcscheme</key>
+		<dict>
+			<key>orderHint</key>
+			<integer>2</integer>
+		</dict>
 	</dict>
 	<key>SuppressBuildableAutocreation</key>
 	<dict>
+		<key>C57A614116CA6EAF00C9ED3D</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>C57A619516CA723600C9ED3D</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
 		<key>C57FDB2416C1B97A0060C293</key>
 		<dict>
 			<key>primary</key>

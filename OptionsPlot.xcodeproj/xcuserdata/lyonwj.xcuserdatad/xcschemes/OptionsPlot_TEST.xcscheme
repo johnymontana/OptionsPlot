@@ -14,9 +14,9 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "C57FDB2416C1B97A0060C293"
-               BuildableName = "OptionsPlot"
-               BlueprintName = "OptionsPlot"
+               BlueprintIdentifier = "C57A614116CA6EAF00C9ED3D"
+               BuildableName = "OptionsPlot_TEST"
+               BlueprintName = "OptionsPlot_TEST"
                ReferencedContainer = "container:OptionsPlot.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
@@ -28,23 +28,13 @@
       shouldUseLaunchSchemeArgsEnv = "YES"
       buildConfiguration = "Debug">
       <Testables>
-         <TestableReference
-            skipped = "NO">
-            <BuildableReference
-               BuildableIdentifier = "primary"
-               BlueprintIdentifier = "C57A619516CA723600C9ED3D"
-               BuildableName = "OptionsPlot_Tests.octest"
-               BlueprintName = "OptionsPlot_Tests"
-               ReferencedContainer = "container:OptionsPlot.xcodeproj">
-            </BuildableReference>
-         </TestableReference>
       </Testables>
       <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "C57FDB2416C1B97A0060C293"
-            BuildableName = "OptionsPlot"
-            BlueprintName = "OptionsPlot"
+            BlueprintIdentifier = "C57A614116CA6EAF00C9ED3D"
+            BuildableName = "OptionsPlot_TEST"
+            BlueprintName = "OptionsPlot_TEST"
             ReferencedContainer = "container:OptionsPlot.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
@@ -61,9 +51,9 @@
       <BuildableProductRunnable>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "C57FDB2416C1B97A0060C293"
-            BuildableName = "OptionsPlot"
-            BlueprintName = "OptionsPlot"
+            BlueprintIdentifier = "C57A614116CA6EAF00C9ED3D"
+            BuildableName = "OptionsPlot_TEST"
+            BlueprintName = "OptionsPlot_TEST"
             ReferencedContainer = "container:OptionsPlot.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
@@ -79,9 +69,9 @@
       <BuildableProductRunnable>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "C57FDB2416C1B97A0060C293"
-            BuildableName = "OptionsPlot"
-            BlueprintName = "OptionsPlot"
+            BlueprintIdentifier = "C57A614116CA6EAF00C9ED3D"
+            BuildableName = "OptionsPlot_TEST"
+            BlueprintName = "OptionsPlot_TEST"
             ReferencedContainer = "container:OptionsPlot.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
