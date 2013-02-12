@@ -8,6 +8,11 @@
 
 #import <SenTestingKit/SenTestingKit.h>
 
+@class OptionQuote;
+
 @interface OptionQuoteDownload_Test : SenTestCase
+{
+    OptionQuote* quote;
+}
 
 @end

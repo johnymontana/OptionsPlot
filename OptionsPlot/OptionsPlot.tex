@@ -1,0 +1,73 @@
+\documentclass[]{article}
+\usepackage{pgfplots}
+\usepackage[margin=1cm]{geometry}
+\begin{document}
+\input{variables.tex}
+
+\title{OptionsPlot}
+\author{Option Plots For: \ticker}
+\date{Prepared: \today}
+\maketitle
+\pgfplotsset{width=17cm, compat=1.3}
+
+\section{General Information}
+\begin{table}[!th]
+\begin{tabular}{| l | r |}
+\hline
+\textbf{Underlying Asset Ticker:} & \ticker \\
+\hline
+\textbf{Current \ticker quote:} & \underlyingquote \\
+\hline
+\textbf{Options Expiration Date:} & \expiration \\
+\hline
+\textbf{Historic Volatility:} & \histvolatility \\
+\hline
+\textbf{At-the-money implied volatility:} & \impliedvolatility \\
+\hline
+\end{tabular}
+\end{table}
+
+\section{Volatility Smile}
+\subsection{Volatility Smile Plot for \ticker  \expiration  \callorput s}
+\begin{tikzpicture}
+\begin{axis}[xlabel=Strike, ylabel=Volatility]
+\addplot+ [scatter, only marks] file{coords.dat};
+\end{axis}
+\end{tikzpicture}
+
+\section{Black-Scholes Model Option Prices vs. Observed Market Prices}
+
+\subsection{Calculated using historic volatility, \ticker $\sigma=\histvolatility$}
+\begin{tikzpicture}
+\begin{axis}[xlabel=Black-Scholes calculated price, ylabel=Last observed market price]
+%\addplot gnuplot[id=filesuffix]{(x)};
+
+\addplot+ [scatter, only marks] file{hist_coords.dat};
+% how to plot y=x with domain 0:xmax
+%\draw[ultra thin] (axis cs:\pgfkeysvalueof{/pgfplots/xmin},0) -- (axis cs:\pgfkeysvalueof{/pgfplots/xmax},0);
+%\draw[ultra thin] (axis cs:0,\pgfkeysvalueof{/pgfplots/ymin}) -- (axis cs:0,\pgfkeysvalueof{/pgfplots/ymax});
+%\def\lims{ymax=<num>}
+
+%\addplot [domain=0:/pgfplots/xmax] {x};
+%\addplot coordinates {(0,0) (/pgfplots/xmax, /pgfplots/ymax)};
+%\addplot[mark=none, domain=-2.5:2.5, thick, red] ({x},{x*x-0.5});% 
+
+%\draw (0, current axis.above origin) -- (current axis.right of origin, current axis.above origin); %(current axis.below origin);
+%\draw (current axis.left of origin) -- (current axis.right of origin);
+%\draw ({axis cs:1.2,0}|-{rel axis cs:0,0}) -- ({axis cs:1.2,0}|-{rel axis cs:0,1});
+%\xdef\maximumdomain{\pgfkeysvalueof{/pgfplots/xmax}}
+%\addplot[domain=0:1000] {x};
+
+\draw (rel axis cs:0,0) -- (rel axis cs:1,1);
+\end{axis}
+\end{tikzpicture}
+
+\subsection{Calculated using at-the-money implied volatility, \ticker $\sigma=\impliedvolatility$}
+\begin{tikzpicture}
+\begin{axis}[xlabel=Black-Scholes calculated price, ylabel=Last observed market price]
+\addplot+ [scatter, only marks] file{iv_coords.dat};
+\draw (rel axis cs:0,0) -- (rel axis cs:1,1);
+\end{axis}
+\end{tikzpicture}
+
+\end{document}

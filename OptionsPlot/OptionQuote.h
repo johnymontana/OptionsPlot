@@ -5,7 +5,8 @@
 //  Created by lyonwj on 2/5/13.
 //  Copyright (c) 2013 William Lyon. All rights reserved.
 //
-// This class holds all data 
+// This class holds all data for a specific Option quote
+// and has functionality to calc black scholoes price and implied volatilities
 
 #import <Foundation/Foundation.h>
 

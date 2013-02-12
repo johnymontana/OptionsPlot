@@ -7,7 +7,16 @@
 //
 
 #import <SenTestingKit/SenTestingKit.h>
+@class OptionQuote;
 
 @interface OptionQuote_Test : SenTestCase
+{
+    OptionQuote* quote;
+    OptionQuote* quote1;
+    OptionQuote* quote2;
+    OptionQuote* quote3;
+    
+    NSArray* arrayOfQuotes;
+}
 
 @end

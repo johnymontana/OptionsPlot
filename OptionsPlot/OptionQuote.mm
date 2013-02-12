@@ -136,6 +136,7 @@
 {
     // Find OptionQuote in the money and return its implied volatility
     // This assumes calls only since no puts have IV at this point, need to deal with puts as well
+    // also assumes all OptionQuotes have same underlying asset
     
     OptionQuote* firstQuote = optionQuotes[0];
     NSNumber* targetStrike = [NSNumber numberWithInt:[firstQuote.spotPrice intValue]];

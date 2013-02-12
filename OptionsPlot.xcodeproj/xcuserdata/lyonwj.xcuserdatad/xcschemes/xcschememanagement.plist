@@ -9,11 +9,6 @@
 			<key>orderHint</key>
 			<integer>0</integer>
 		</dict>
-		<key>OptionsPlot_TEST.xcscheme</key>
-		<dict>
-			<key>orderHint</key>
-			<integer>1</integer>
-		</dict>
 		<key>OptionsPlot_Tests.xcscheme</key>
 		<dict>
 			<key>orderHint</key>
@@ -28,6 +23,11 @@
 			<true/>
 		</dict>
 		<key>C57A619516CA723600C9ED3D</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>C57A61C316CA8C3800C9ED3D</key>
 		<dict>
 			<key>primary</key>
 			<true/>

@@ -22,6 +22,7 @@
 		C57A61B816CA755000C9ED3D /* black_scholes_put.mm in Sources */ = {isa = PBXBuildFile; fileRef = C5E8029A16C4205500E28297 /* black_scholes_put.mm */; };
 		C57A61B916CA755400C9ED3D /* main.mm in Sources */ = {isa = PBXBuildFile; fileRef = C57FDB2B16C1B97A0060C293 /* main.mm */; };
 		C57A61BA16CA755900C9ED3D /* OptionQuoteDownload.mm in Sources */ = {isa = PBXBuildFile; fileRef = C57FDB3716C1BA260060C293 /* OptionQuoteDownload.mm */; };
+		C57A61DD16CAD6A700C9ED3D /* OptionsPlot.tex in Resources */ = {isa = PBXBuildFile; fileRef = C57A61DC16CAD6A700C9ED3D /* OptionsPlot.tex */; };
 		C57FDB2916C1B97A0060C293 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C57FDB2816C1B97A0060C293 /* Foundation.framework */; };
 		C57FDB2C16C1B97A0060C293 /* main.mm in Sources */ = {isa = PBXBuildFile; fileRef = C57FDB2B16C1B97A0060C293 /* main.mm */; };
 		C57FDB3016C1B97A0060C293 /* OptionsPlot.1 in CopyFiles */ = {isa = PBXBuildFile; fileRef = C57FDB2F16C1B97A0060C293 /* OptionsPlot.1 */; };
@@ -66,6 +67,7 @@
 		C57A61AD16CA73C900C9ED3D /* OptionQuote_Test.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OptionQuote_Test.mm; sourceTree = "<group>"; };
 		C57A61AF16CA73EB00C9ED3D /* OptionQuoteDownload_Test.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OptionQuoteDownload_Test.h; sourceTree = "<group>"; };
 		C57A61B016CA73EB00C9ED3D /* OptionQuoteDownload_Test.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OptionQuoteDownload_Test.m; sourceTree = "<group>"; };
+		C57A61DC16CAD6A700C9ED3D /* OptionsPlot.tex */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = OptionsPlot.tex; sourceTree = "<group>"; };
 		C57FDB2516C1B97A0060C293 /* OptionsPlot */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = OptionsPlot; sourceTree = BUILT_PRODUCTS_DIR; };
 		C57FDB2816C1B97A0060C293 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		C57FDB2B16C1B97A0060C293 /* main.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = main.mm; sourceTree = "<group>"; };
@@ -154,10 +156,19 @@
 			name = "Supporting Files";
 			sourceTree = "<group>";
 		};
+		C57A61BB16CA88A900C9ED3D /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				C57A61DC16CAD6A700C9ED3D /* OptionsPlot.tex */,
+			);
+			name = Resources;
+			path = OptionsPlot;
+			sourceTree = "<group>";
+		};
 		C57FDB1C16C1B97A0060C293 = {
 			isa = PBXGroup;
 			children = (
-				C57A614E16CA6F3000C9ED3D /* SenTestingKit.framework */,
+				C57A61BB16CA88A900C9ED3D /* Resources */,
 				C57FDB2A16C1B97A0060C293 /* OptionsPlot */,
 				C57A619F16CA723600C9ED3D /* OptionsPlot_Tests */,
 				C57FDB2716C1B97A0060C293 /* Frameworks */,
@@ -177,6 +188,7 @@
 		C57FDB2716C1B97A0060C293 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				C57A614E16CA6F3000C9ED3D /* SenTestingKit.framework */,
 				C57FDB2816C1B97A0060C293 /* Foundation.framework */,
 				C57A619716CA723600C9ED3D /* SenTestingKit.framework */,
 				C57A619916CA723600C9ED3D /* Cocoa.framework */,
@@ -279,6 +291,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				C57A61A416CA723600C9ED3D /* InfoPlist.strings in Resources */,
+				C57A61DD16CAD6A700C9ED3D /* OptionsPlot.tex in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

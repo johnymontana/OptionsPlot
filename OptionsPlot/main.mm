@@ -5,6 +5,8 @@
 //  Created by lyonwj on 2/5/13.
 //  Copyright (c) 2013 William Lyon. All rights reserved.
 //
+//
+//
 
 #import <Foundation/Foundation.h>
 #import "OptionQuoteDownload.h"
@@ -15,8 +17,24 @@ int main(int argc, const char * argv[])
 
     @autoreleasepool {
         
+        NSDate* mainStart = [NSDate date];
+        NSDate* mainFinish;
+        double totalRunningTime;
+        NSArray* tickers = @[@"AAPL"]; // this should be populated from command line arguments
         
-        NSArray* tickers = @[@"GOOG"]; // this should be populated from command line arguments
+        NSFileManager *fm = [NSFileManager defaultManager];
+        //NSString *path = [fm currentDirectoryPath];
+        NSString* homeDir = NSHomeDirectory(); // get path to home dir
+        
+        
+        
+        NSMutableDictionary* historicVol = [[NSMutableDictionary alloc] init];  // coordinates for historical volatility plot
+        NSMutableDictionary *volSmile = [[NSMutableDictionary alloc] init];     // coordinates for volatility smile plot
+        
+        NSMutableDictionary *impliedVolCoords = [[NSMutableDictionary alloc] init]; // coordinates for implied volatility plot
+        
+        NSNumber* IV = [[NSNumber alloc] init];
+
         
         int funcCallCount = 0;                  // used for profiling method calls
         double timeForCalcBSPrice = 0.;
@@ -28,19 +46,7 @@ int main(int argc, const char * argv[])
         NSDate* methodFinish = [NSDate date];
         double timeForOptionQuoteDownload = [methodFinish timeIntervalSinceDate:methodStart];
         
-        NSFileManager *fm = [NSFileManager defaultManager];
-        NSString *path = [fm currentDirectoryPath];
-        NSString* homeDir = NSHomeDirectory(); // get path to home dir
-        
-
-        
-        NSMutableDictionary* historicVol = [[NSMutableDictionary alloc] init];  // coordinates for historical volatility plot
-        NSMutableDictionary *volSmile = [[NSMutableDictionary alloc] init];     // coordinates for volatility smile plot
-        
-        NSMutableDictionary *impliedVolCoords = [[NSMutableDictionary alloc] init]; // coordinates for implied volatility plot
-        
-        NSNumber* IV = [[NSNumber alloc] init];
-        
+                
         
         
         for (OptionQuote* quote in quotes)
@@ -139,13 +145,13 @@ int main(int argc, const char * argv[])
         [texVars writeToFile:[NSString stringWithFormat:@"%@/variables.tex", datFilePath] atomically:NO encoding:NSUTF8StringEncoding error:nil];
         
               
-        NSLog(@"Home Path: %@", homeDir);
-        NSLog(@"Dat file path: %@", datFilePath);
-        NSLog(@"Current dir: %@", path);                
+        //NSLog(@"Home Path: %@", homeDir);
+        //NSLog(@"Dat file path: %@", datFilePath);
+        //NSLog(@"Current dir: %@", path);
         
         [fm changeCurrentDirectoryPath:datFilePath]; // change current dir to ~/OptionsPlot/
         
-        // should get user specific paths to executables, this is bad:
+        // should get environment specific paths to executables, this is bad:
         
         [[NSTask launchedTaskWithLaunchPath:@"/usr/texbin/pdflatex" arguments:[NSArray arrayWithObjects:[NSString stringWithFormat:@"%@OptionsPlot.tex", datFilePath], nil]] waitUntilExit];
         
@@ -155,13 +161,16 @@ int main(int argc, const char * argv[])
         // [[NSTask launchedTaskWithLaunchPath:@"/usr/texbin/dvips" arguments:[NSArray arrayWithObjects:[NSString stringWithFormat:@"%@OptionsPlot.dvi", datFilePath], nil]] waitUntilExit];
         
         //[NSTask launchedTaskWithLaunchPath:@"/usr/local/bin/ps2pdf" arguments:[NSArray arrayWithObjects:[NSString stringWithFormat:@"%@OptionsPlot.ps", datFilePath], nil]];
-        
+        mainFinish = [NSDate date];
+        totalRunningTime = [mainFinish timeIntervalSinceDate:mainStart];
         NSLog(@"Avg time for CalcBSPrice: %f millisecs", (timeForCalcBSPrice/funcCallCount)*1000.);
         NSLog(@"Avg time for CalcBSPriceUsingIV: %f millisecs", (timeForCalcBSPriceUsingIV/funcCallCount)*1000.);
         NSLog(@"Avg time for CalcIV: %f millisecs", (timeForCalcIV/funcCallCount)*1000.);
         NSLog(@"Time for OptionQuoteDownload: %f secs", timeForOptionQuoteDownload);
         NSLog(@"Time to generate tex/PDF: %f secs", timeForGenTexPDF);
-    
+        NSLog(@"Total running time: %f secs", totalRunningTime);
+        
+        //NSLog(@"%@", [[NSBundle mainBundle] pathForResource:@"template" ofType:@"tex"]); // No bundle with console-only app, how to cp template.tex
     }
     return 0;
 }

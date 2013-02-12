@@ -15,8 +15,8 @@
 
 // adapted from: http://tech.element77.com/2012/02/fetching-stock-data-from-yahoo-for-ios.html
 
-// TODO: fix expiration date issue
-// for now, March 2013 is hardcoded, and 2013-03-15 is hardcoded for expiration
+// TODO: expiration date issue
+// for now 2013-03-15 is hardcoded for expiration
 
 #define QUOTE_QUERY_PREFIX @"http://query.yahooapis.com/v1/public/yql?q=select%20*%20from%20yahoo.finance.options%20where%20symbol%20in%20("
 #define QUOTE_QUERY_SUFFIX @")%20and%20expiration%3D%222013-03%22&format=json&diagnostics=false&env=http%3A%2F%2Fdatatables.org%2Falltables.env&callback="
@@ -135,7 +135,7 @@
 //http://query.yahooapis.com/v1/public/yql?q=select%20Adj_Close%20from%20yahoo.finance.historicaldata%20where%20symbol%20%3D%20%22YHOO%22%20and%20startDate%20%3D%20%222013-01-01%22%20and%20endDate%20%3D%20%222013-02-06%22&format=json&env=store%3A%2F%2Fdatatables.org%2Falltableswithkeys&callback=
 #define HIST_QUOTES_PREFIX @"http://query.yahooapis.com/v1/public/yql?q=select%20Adj_Close%20from%20yahoo.finance.historicaldata%20where%20symbol%20%3D%20%22"
 #define HIST_QUOTES_SUFFIX @"%22%20and%20startDate%20%3D%20%222013-01-01%22%20and%20endDate%20%3D%20%222013-02-06%22&format=json&env=store%3A%2F%2Fdatatables.org%2Falltableswithkeys&callback="
-
+// TODO: fix hardcoded dates
 
 +(NSNumber*)calcUnderlyingVolatility:(NSString *)ticker
 {
@@ -168,20 +168,23 @@
     
     NSNumberFormatter *formatter = [[NSNumberFormatter alloc] init];
     [formatter setNumberStyle:NSNumberFormatterDecimalStyle];
-
-    for (NSDictionary *quoteEntry in quoteEntries)
+    if ([quoteEntries isKindOfClass:[NSArray class]])
     {
+        for (NSDictionary *quoteEntry in quoteEntries)
+        {
+            
+            [histQuotes addObject:[formatter numberFromString:quoteEntry[@"Adj_Close"]]];
+        }
         
-        [histQuotes addObject:[formatter numberFromString:quoteEntry[@"Adj_Close"]]];
+        NSLog(@"%@", histQuotes);
+        double stdDev = [[self standardDeviationOf:histQuotes] doubleValue];
+        double normalizeTerm = sqrt(21)*.01;
+        return [NSNumber numberWithDouble:(stdDev*normalizeTerm)];
+
     }
-    
-    NSLog(@"%@", histQuotes);
-    double stdDev = [[self standardDeviationOf:histQuotes] doubleValue];
-    double normalizeTerm = sqrt(21)*.01;
-    
-    return [NSNumber numberWithDouble:(stdDev*normalizeTerm)];
-    
-    
+       
+    NSLog(@"Historical volatility not available. Terminating...");
+    exit(1);
 }
 
 
