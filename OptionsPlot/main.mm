@@ -18,9 +18,11 @@ int main(int argc, const char * argv[])
         
         NSArray* tickers = @[@"ORCL"]; // this should be populated from command line arguments
         
-        
+        NSDate* methodStart = [NSDate date];
         NSArray *quotes = [OptionQuoteDownload fetchQuotesFor:tickers];
+        NSDate* methodFinish = [NSDate date];
         
+        double timeForOptionQuoteDownload = [methodFinish timeIntervalSinceDate:methodStart];
         
         NSFileManager *fm;
         fm = [NSFileManager defaultManager];
@@ -145,9 +147,10 @@ int main(int argc, const char * argv[])
        // [[NSTask launchedTaskWithLaunchPath:@"/usr/texbin/dvips" arguments:[NSArray arrayWithObjects:[NSString stringWithFormat:@"%@OptionsPlot.dvi", datFilePath], nil]] waitUntilExit];
         
         //[NSTask launchedTaskWithLaunchPath:@"/usr/local/bin/ps2pdf" arguments:[NSArray arrayWithObjects:[NSString stringWithFormat:@"%@OptionsPlot.ps", datFilePath], nil]];
-        NSLog(@"Avg CPU time for CalcBSPrice: %f", timeForCalcBSPrice/funcCallCount);
-        NSLog(@"Avg CPU time for CalcBSPriceUsingIV: %f", timeForCalcBSPriceUsingIV/funcCallCount);
-        NSLog(@"Avg CPU time for CalcIV: %f", timeForCalcIV/funcCallCount);
+        NSLog(@"Avg CPU time for CalcBSPrice: %f millisecs", (timeForCalcBSPrice/funcCallCount)*1000.);
+        NSLog(@"Avg CPU time for CalcBSPriceUsingIV: %f millisecs", (timeForCalcBSPriceUsingIV/funcCallCount)*1000.);
+        NSLog(@"Avg CPU time for CalcIV: %f millisecs", (timeForCalcIV/funcCallCount)*1000.);
+        NSLog(@"CPU time for OptionQuoteDownload: %f secs", timeForOptionQuoteDownload);
     
     }
     return 0;
