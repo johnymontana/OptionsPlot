@@ -178,7 +178,7 @@
         
         NSLog(@"%@", histQuotes);
         double stdDev = [[self standardDeviationOf:histQuotes] doubleValue];
-        double normalizeTerm = sqrt(21)*.01;
+        double normalizeTerm = sqrt(21./365.);
         return [NSNumber numberWithDouble:(stdDev*normalizeTerm)];
 
     }

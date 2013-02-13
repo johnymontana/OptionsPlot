@@ -72,11 +72,11 @@
     
     if ([self.type isEqual:@"C"])
     {
-        self.impliedVolatility = [NSNumber numberWithDouble:option_price_implied_volatility_call_black_scholes_newton(spot, strike, risk_free_rate, time, optionsPrice)];
+        self.impliedVolatility = [NSNumber numberWithDouble:option_price_implied_volatility_call_black_scholes_bisections(spot, strike, risk_free_rate, time, optionsPrice)];
         
         if ([self.impliedVolatility isEqualToNumber:[NSNumber numberWithDouble:-99e10]])
         {
-            self.impliedVolatility = [NSNumber numberWithDouble:option_price_implied_volatility_call_black_scholes_bisections(spot, strike, risk_free_rate, time, optionsPrice)];
+            self.impliedVolatility = [NSNumber numberWithDouble:option_price_implied_volatility_call_black_scholes_newton(spot, strike, risk_free_rate, time, optionsPrice)];
         }
     }
     // cannot find implementation of option_price_implied_volatility_put** 

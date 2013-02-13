@@ -20,7 +20,7 @@ int main(int argc, const char * argv[])
         NSDate* mainStart = [NSDate date];
         NSDate* mainFinish;
         double totalRunningTime;
-        NSArray* tickers = @[@"GE"]; // this should be populated from command line arguments
+        NSArray* tickers = @[@"ORCL"]; // this should be populated from command line arguments
         
         NSFileManager *fm = [NSFileManager defaultManager];
         //NSString *path = [fm currentDirectoryPath];
@@ -130,6 +130,8 @@ int main(int argc, const char * argv[])
         NSMutableString* texVars= [[NSMutableString alloc] init];
         
         // Define latex macros to use in template.tex
+        // TODO: add macro for MaxX for plot
+        
         line = [NSString stringWithFormat:@"\\newcommand{\\ticker}{%@ }", tickers[0]];
         [texVars appendString:line];
         line = [NSString stringWithFormat:@"\\newcommand{\\expiration}{ %@ }", [[quotes[0] expiration] description]];
