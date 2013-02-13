@@ -1,7 +1,7 @@
 OptionsPlot
 ===========
 
-OptionsPlot downloads options quotes from Yahoo! Finance and uses the <a href="http://finance.bi.no/~bernt/gcc_prog/"> Financial Numercial Recipes C++ library</a> to calculate implied volatilities and other basic options analysis. PFGPlots (Latex) is used to plot the volatility smile and a few other simple plots. OptionsPlot will create a directory (OptionsPlot) in the user's home directory where any generated PDF reports will be saved. See ORCL_OptionsPlot.pdf for an example.
+OptionsPlot downloads options quotes from Yahoo! Finance and uses the <a href="http://finance.bi.no/~bernt/gcc_prog/"> Financial Numercial Recipes C++ library</a> to calculate implied volatilities and other basic options analysis. PFGPlots (Latex) is used to plot the volatility smile and a few other simple plots. OptionsPlot will create a directory (OptionsPlot) in the user's home directory where any generated PDF reports will be saved. See <a href="https://github.com/johnymontana/OptionsPlot/blob/master/ORCL_OptionsPlot.pdf?raw=true">ORCL_OptionsPlot.pdf </a> for an example.
 
 Installation:
 =============
